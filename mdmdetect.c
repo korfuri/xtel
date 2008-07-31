@@ -22,6 +22,7 @@ static char rcsid[] = "$Id: mdmdetect.c,v 1.3 2001/02/11 00:02:58 pierre Exp $";
 
 /* Detection du modem pour generation du xtel.lignes */
 
+#include "Config.tmpl"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -37,17 +38,21 @@ static char rcsid[] = "$Id: mdmdetect.c,v 1.3 2001/02/11 00:02:58 pierre Exp $";
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#ifdef USE_TERMIOS
+#include <termios.h>
+#else
 #include <termio.h>
+#endif
 #ifdef SVR4
 #include <sys/mkdev.h>
 #endif /* SVR4 */
 
 #define TIMEOUT_READ		5
+#define TEMPO			1000000
 
-#ifndef __FreeBSD__
-#ifndef __GLIBC__
+#ifndef HAS_STRERROR
 extern char *sys_errlist[];
-#endif
+#define strerror(e) (sys_errlist[e])
 #endif
 extern char *xtel_basename (), *next_token ();
 
@@ -100,13 +105,14 @@ static void check_and_lock (char *line)
 {
   char buf[256];
   struct stat statb;
-  FILE *fplock;
+  int fd, n;
+  pid_t pid;
 
   /* A la mode UUCP... */
 #ifdef SVR4
   sprintf (buf, "/dev/%s", line);
   if (stat (buf, &statb) != 0) {
-      fprintf (stderr, "%s: %s\n", buf, sys_errlist[errno]);
+      fprintf (stderr, "%s: %s\n", buf, strerror(errno));
       the_end (1);
   }
 
@@ -116,19 +122,64 @@ static void check_and_lock (char *line)
 #endif /* SVR4 */
 
   /* Test du lock */
-  if (stat (lock_file, &statb) == 0) {
-    fprintf (stderr, "Lock file %s already exists, exiting.\n", lock_file);
-    the_end (1);
-  }
+  do {
+      fd = open( lock_file, O_CREAT | O_EXCL | O_WRONLY, 0644 );
+      if (fd < 0) {
+	  /* erreur lors de la création du fichier de lock */
+	  if (errno == EEXIST) {
+	      /* le fichier existe : voir si le programme qui l'a créé existe toujours */
+	      fd = open( lock_file, O_RDONLY );
+	      if (fd >= 0) {
+		  n = read( fd, buf, 11 );
+		  close( fd );
+		  if (n > 0) {
+		      buf[n] = '\0';
+		      pid = atoi(buf);
+		      /* teste l'existence du processus ayant créé le fichier */
+		      if (pid == 0 || kill(pid,0) == -1 && errno == ESRCH) {
+			  if (unlink(lock_file) == 0) {
+			      fprintf (stderr, "Removed stale lock %s (pid %d)\n", lock_file, pid);
+			      /* et on retente la création dudit fichier */
+			      fd = -1;
+			  }
+			  else {
+			      fprintf (stderr, "Can't remove stale lock %s\n", lock_file);
+			      the_end (1);
+			  }
+		      }
+		      else {
+			  fprintf (stderr, "Device %s is already locked by pid %d\n", line, pid);
+			  the_end (1);
+		      }
+		  }
+		  else {
+		      fprintf (stderr, "Can't read pid from lock file %s\n", lock_file);
+		      the_end (1);
+		  }
+	      }
+	      else if (errno != ENOENT) {
+		  /* il ne vient pas d'être effacé par un autre programme */
+		  /* c'est donc un vrai problème */
+		  fprintf (stderr, "%s: %s\n", lock_file, strerror(errno));
+		  the_end (1);
+	      }
+	  }
+	  else {
+	      /* fichier impossible à créer */
+	      fprintf (stderr, "Can't create lock file %s (%s)\n", lock_file, strerror(errno));
+	      the_end (1);
+	  }
+      }
+  } while (fd < 0);
 
-  /* Pose le lock */
-  if (!(fplock = fopen (lock_file, "w"))) {
-      fprintf (stderr, "%s: %s\n", lock_file, sys_errlist[errno]);
+  /* Le lock est posé ; il faut y inscrire le pid de ce programme */
+  sprintf (buf, "%10d\n", getpid());
+  if (write (fd, buf, 11) != 11) {
+      fprintf (stderr, "Error writing to file %s (%s)\n", lock_file, strerror(errno));
+      close (fd);
       the_end (1);
   }
-  
-  fprintf (fplock, "%10d\n", getpid());
-  fclose (fplock);
+  close (fd);
 }
 
 /* Lecture d'une ligne terminee par '\n' */
@@ -191,27 +242,20 @@ int port;
 }
 
 /* Recherche de mot-cle */
-static int check_for_kw (int fd, char *builder, char *kw, char *s)
+static char* check_for_kw (int fd, char *s)
 {
-  char modem_string[4096], chat_script[256];
+  static char modem_string[4096], chat_script[256];
 
   fprintf (stderr, "."); fflush (stderr);
 
   sprintf (chat_script, "%s\r OK", s);
-  if (do_chat (fd, chat_script, TIMEOUT_READ, NULL, modem_string, sizeof(modem_string)) != 0)
-    return 0;
+  if (do_chat (fd, chat_script, TIMEOUT_READ, TEMPO, NULL, modem_string, sizeof(modem_string)) != 0)
+    return NULL;
 
   if (debug)
-    log_debug ("[%s] check_for_kw %s: reponse= %s", builder, kw, modem_string);
+    log_debug ("reponse= %s", modem_string);
 
-  if (strstr (modem_string, kw)) {
-      if (debug)
-	log_debug ("%s trouve !", kw);
-
-      return 1;
-  }
-      
-  return 0;
+  return modem_string;
 }
 
 
@@ -219,7 +263,8 @@ main (ac, av)
 int ac;
 char **av;
 {
-  char *cp, *str1, *str2;
+  char cmd[6];
+  char *cp, *fab, *modem_string, *reponse;
   register int i;
   int found = 0;
 #ifdef DEBUG_XTELD
@@ -285,7 +330,29 @@ char **av;
     }
   }
 
-  if (!query) {
+  if (query) {
+    /* Lecture de la liste des modems */
+    while (read_a_line (fdl, buf, sizeof(buf)) > 0) {
+
+      if (debug)
+	log_debug ("(%s)", buf);
+
+      if (buf[0] == '#' || buf[0] == '\n')
+	continue;
+
+      /* Fabricant */
+      if (buf[0] == '[') {
+	fab = strdup (&buf[1]);
+	fab[strlen(fab)-2] = 0;
+	if (query)
+	  printf ("%s\n", fab);
+
+	continue;
+      }
+    }
+  }
+
+  else {
     /* Test et lock de la ligne */
     check_and_lock (cp);
 
@@ -296,65 +363,53 @@ char **av;
     }
 
     /* Ligne en mode 'raw' */
-    init_tty (fd, B9600, CS8, 2, 0, 0);
+    init_tty (fd, B9600, CS8, 2, 0, 0, TEMPO);
 
     /* Test de presence de modem */
-    if (do_chat (fd, "AT\r OK", 3, NULL, NULL, 0)) {
+    if (do_chat (fd, "AT\r OK", 3, TEMPO, NULL, NULL, 0)) {
       /* On insiste un peu */
-      if (do_chat (fd, "AT\r OK", 3, NULL, NULL, 0)) {
+      if (do_chat (fd, "AT\r OK", TEMPO, 3, NULL, NULL, 0)) {
 	fprintf (stderr, "Pas de modem présent !\n");
 	the_end (1);
       }
     }
-  }
 
-  /* Lecture de la liste des modems */
-  while (read_a_line (fdl, buf, sizeof(buf)) > 0) {
-
-    if (debug)
-      log_debug ("(%s)", buf);
-
-    if (buf[0] == '#' || buf[0] == '\n')
-      continue;
-
-    /* Fabricant */
-    if (buf[0] == '[') {
-      str1 = strdup (&buf[1]);
-      str1[strlen(str1)-2] = 0;
-      if (query)
-	printf ("%s\n", str1);
-
-      continue;
-    }
-
-    /* Si on a specifie un fabricant, teste le nom */
-    if (query || (builder && strcmp (str1, builder)))
-      continue;
-      
-    /* Mot-cle a tester */
-    str2 = next_token (buf, ":");
-
-    if (!str2) {
-      fprintf (stderr, "Erreur de lecture %s\n", modem_list);
-      the_end (1);
-    }
-
-    /* Interrogation par ATI puis ATIx */
-    found = 0;
-    if ((found = check_for_kw (fd, str1, str2, "ATI")) == 0) {
-      for (i = '0' ; i <= '9' ; i++) {
-	char cmd[6];
-
-	sprintf (cmd, "ATI%c", i);
-	if ((found = check_for_kw (fd, str1, str2, cmd)) > 0) {
-	  break;
+    /* interrogation du modem sur l'ensemble des registres de configuration */
+    strcpy (cmd, "ATI");
+    for (i = -1 ; !found && i <= 9 ; i++) {
+      if (i >= 0)
+	sprintf (cmd, "ATI%d", i);
+      if ((reponse = check_for_kw (fd, cmd)) != NULL) {
+	/* on a une réponse : rechercher dans la base */
+	lseek (fdl, 0, 0);
+	found = 0;
+	while (!found && read_a_line (fdl, buf, sizeof(buf)) > 0) {
+	  if (debug)
+	    log_debug ("(%s)", buf);
+	  if (buf[0] == '#' || buf[0] == '\n') {
+	    /* commentaire ou ligne blanche */
+	  }
+	  else if (buf[0] == '[') {
+	    /* Fabricant */
+	    fab = strdup (&buf[1]);
+	    fab[strlen(fab)-2] = 0;
+	  }
+	  else if (!builder || strcmp (builder, fab)==0) {
+	    /* description d'un modem */
+	    modem_string = next_token (buf, ":");   /* Mot-clé à tester */
+	    if (strstr (reponse, modem_string)) {
+	      if (debug)
+		log_debug ("%s trouve !", modem_string);
+	      found = 1;
+	    }
+	  }
 	}
       }
     }
 
     if (found) {
       if (debug)
-	log_debug ("str2= %s buf= %s", str2, buf);
+	log_debug ("builder= %s modem id= %s", fab, modem_string);
 
       puts ("\n");
 

@@ -1,0 +1,24 @@
+Source: xtel
+Section: comm
+Priority: extra
+Maintainer: Debian QA Group <packages@qa.debian.org>
+Standards-Version: 3.8.0
+Build-Depends: lesstif2-dev,libx11-dev,libxmu-dev,libxpm-dev,libxt-dev,x11proto-core-dev,xbitmaps,libxaw7-dev,debhelper (>= 5.0.31),gif2png,xbase-clients,xutils,libjpeg-dev, doc-base, xfonts-utils
+Homepage: http://pficheux.free.fr/xtel/
+
+Package: xtel
+Architecture: any
+Pre-Depends: x11-common (>= 1:7.0.0)
+Depends: openbsd-inetd | inet-superserver, xbase-clients (>= 3.3.3.1-5), xutils, ppp, ${shlibs:Depends}, ${misc:Depends}
+Recommends: logrotate
+Description: X emulator of the French Minitel
+ This is a lesstif Minitel client that runs on color/black and white
+ X Display and a xteld daemon that can make Minitel connection with
+ one or more modems.
+ .
+ The Minitel is a dedicated terminal for accessing the Teletel,
+ the French videotex network.
+ Thus, this package is almost only for French users.
+ This package now supports the 3622 I-Minitel protocol
+ (more informations on http://www.i-minitel.com).
+

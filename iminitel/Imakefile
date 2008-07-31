@@ -1,5 +1,13 @@
 XCOMM $Id: Imakefile,v 1.2 2001/02/11 00:15:50 pierre Exp $
+
+#include "../Config.tmpl"
+
 PPPDIR=/etc/ppp
+SBINDIR=/usr/sbin
+
+#ifdef DEBIAN
+SEDCMD=sed 's:$$1:$$PPP_IFACE:;s:$$2:$$PPP_TTY:;s:$$3:$$PPP_SPEED:;s:$$4:$$PPP_LOCAL:;s:$$5:$$PPP_REMOTE:;s:$$6:$$PPP_IPPARAM:'
+#endif
 
 all::
 
@@ -8,12 +16,20 @@ clean::
 depend::
 
 install::
-InstallNonExecFile(iminitel, $(PPPDIR)/peers)
-InstallNonExecFile(chat-iminitel, $(PPPDIR))
+InstallNonExecFile(iminitel,$(PPPDIR)/peers)
+InstallNonExecFile(chat-iminitel,$(PPPDIR))
 InstallNamedProg(connect_iminitel.sh,connect_iminitel,$(LIBDIR)/xtel)
-InstallNamedProg(install_iminitel.sh,install_iminitel,$(BINDIR))
-InstallNamedProg(ip-up.iminitel,ip-up.iminitel, $(PPPDIR))
-InstallNamedProg(ip-down.iminitel,ip-down.iminitel, $(PPPDIR))
-
+#ifdef DEBIAN
+MakeDirectories(install,$(PPPDIR)/ip-up.d $(PPPDIR)/ip-down.d)
 install::
-	install_iminitel
+	@$(SEDCMD) < ip-up.iminitel > $(DESTDIR)$(PPPDIR)/ip-up.d/iminitel
+	@$(SEDCMD) < ip-down.iminitel > $(DESTDIR)$(PPPDIR)/ip-down.d/iminitel
+	chmod 755 $(DESTDIR)$(PPPDIR)/ip-up.d/iminitel $(DESTDIR)$(PPPDIR)/ip-down.d/iminitel
+#else
+InstallNamedProg(install_iminitel.sh,install_iminitel,$(SBINDIR))
+InstallNamedProg(ip-up.iminitel,ip-up.iminitel,$(PPPDIR))
+InstallNamedProg(ip-down.iminitel,ip-down.iminitel,$(PPPDIR))
+#endif
+
+XCOMM install::
+XCOMM 	install_iminitel

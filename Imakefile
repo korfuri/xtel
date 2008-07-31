@@ -4,12 +4,14 @@ XCOMM
 XCOMM Auteur : Pierre FICHEUX
 XCOMM $Id: Imakefile,v 1.29 2001/02/10 23:54:28 pierre Exp $
 XCOMM
+XCOMM Modified for Debian GNU/Linux by Guillaume Morin and Eric Delaunay
 
 #define IHaveSubdirs
 #define PassCDebugFlags 'CDEBUGFLAGS=$(CDEBUGFLAGS)'
 #define PassDependFlags 'DEPENDFLAGS=$(DEPENDFLAGS)'
 
 #include "Config.tmpl"
+#include "Motif.tmpl"
 
 BITMAPSDIR= bitmaps
 PIXMAPSDIR= pixmaps
@@ -26,7 +28,7 @@ NETWORKCFLAGS = -DNO_NETWORK
 #ifdef NO_TERMIO
 TERMIOCFLAGS = -DNO_TERMIO
 #else
-#if defined(USE_TERMIOS) || defined(__FreeBSD__)
+#if defined(USE_TERMIOS) || defined(__FreeBSD__) || defined(__GNU__)
 TERMIOCFLAGS = -DUSE_TERMIOS
 #endif
 #endif
@@ -95,15 +97,26 @@ SVR4CFLAGS= -DSVR4
 
      DEPENDFLAGS = $(XTELCFLAGS)
 
+#ifdef DEBIAN
+      XTELLIGNES = lignes
+    XTELSERVICES = services
+      XTELCFGDIR = /etc/xtel
+      XTELLOGDIR = /var/log
+         SBINDIR = /usr/sbin
+#else
       XTELLIGNES = xtel.lignes
     XTELSERVICES = xtel.services
+      XTELCFGDIR = $(XTELDIR)
+      XTELLOGDIR = $(XTELDIR)
+         SBINDIR = $(BINDIR)
+#endif
 
-CONF_DEFINES  = '-DFICHIER_DEFINITION_LIGNES="$(LIBDIR)/xtel/$(XTELLIGNES)"' \
-		  '-DFICHIER_DEFINITION_SERVICES="$(LIBDIR)/xtel/$(XTELSERVICES)"'
+CONF_DEFINES  = '-DFICHIER_DEFINITION_LIGNES="$(XTELCFGDIR)/$(XTELLIGNES)"' \
+		  '-DFICHIER_DEFINITION_SERVICES="$(XTELCFGDIR)/$(XTELSERVICES)"'
 
 TELE_DEFINES  = '-DXTERM_PATH="$(BINDIR)/xterm"'
 
-XTELD_DEFINES = '-DFICHIER_LOG="$(LIBDIR)/xtel/xtel.log"' \
+XTELD_DEFINES = '-DFICHIER_LOG="$(XTELLOGDIR)/xtel.log"' \
 		  '-DXTEL_LIBDIR="$(LIBDIR)/xtel"'
 
 
@@ -121,7 +134,7 @@ EXTRA_LOAD_FLAGS = -L/usr/ucblib -lucb -lgen
 #endif /* lectra */
 #else
 #ifdef LinuxArchitecture
-#ifdef REDHAT
+#if defined(REDHAT) || defined(DEBIAN)
 DIAL_DEFINES = '-DFICHIER_LCK="/var/lock/LCK..%s"' 
 #else
 DIAL_DEFINES = '-DFICHIER_LCK="/usr/spool/uucp/LCK..%s"' 
@@ -241,19 +254,22 @@ clean::
 InstallManPage(xteld,$(MANDIR))
 
 #ifdef INSTALLDEMON
-InstallProgram(xteld, $(BINDIR))
-InstallProgramWithFlags(mdmdetect, $(BINDIR), $(INSTUIDFLAGS))
-InstallNamedProg(make_xtel_lignes.sh,make_xtel_lignes,$(BINDIR))
+InstallProgram(xteld,$(SBINDIR))
+InstallProgramWithFlags(mdmdetect,$(SBINDIR),$(INSTUIDFLAGS))
 
 install::
-	@if [ -r $(LIBDIR)/xtel/$(XTELLIGNES) ]; then \
-	cp $(LIBDIR)/xtel/$(XTELLIGNES) $(LIBDIR)/xtel/$(XTELLIGNES).old; fi
-	@if [ -r $(LIBDIR)/xtel/$(XTELSERVICES) ]; then \
-	cp $(LIBDIR)/xtel/$(XTELSERVICES) $(LIBDIR)/xtel/$(XTELSERVICES).old; fi
+	@sed 's:^XTEL_LIGNES=.*:XTEL_LIGNES=$(XTELCFGDIR)/$(XTELLIGNES):;s:^MDMDETECT=.*:MDMDETECT=$(SBINDIR)/mdmdetect:' < make_xtel_lignes.sh > $(DESTDIR)$(SBINDIR)/make_xtel_lignes
+	chmod 755 $(DESTDIR)$(SBINDIR)/make_xtel_lignes
 
-InstallNonExecFile($(XTELLIGNES), $(LIBDIR)/xtel)
-InstallNonExecFile($(XTELSERVICES), $(LIBDIR)/xtel)
-InstallNonExecFile(modem.list, $(LIBDIR)/xtel)
+install::
+	@if [ -r $(DESTDIR)$(XTELCFGDIR)/$(XTELLIGNES) ]; then \
+	mv $(DESTDIR)$(XTELCFGDIR)/$(XTELLIGNES) $(DESTDIR)$(XTELCFGDIR)/$(XTELLIGNES).old; fi
+	@if [ -r $(DESTDIR)$(XTELCFGDIR)/$(XTELSERVICES) ]; then \
+	mv $(DESTDIR)$(XTELCFGDIR)/$(XTELSERVICES) $(DESTDIR)$(XTELCFGDIR)/$(XTELSERVICES).old; fi
+
+InstallNamedNonExec(xtel.lignes,$(XTELLIGNES),$(XTELCFGDIR))
+InstallNamedNonExec(xtel.services,$(XTELSERVICES),$(XTELCFGDIR))
+InstallNonExecFile(modem.list,$(LIBDIR)/xtel)
 #endif
 
 SpecialObjectRule(teleinfo.o, teleinfo.c, $(TELE_DEFINES))

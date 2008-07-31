@@ -1,0 +1,37 @@
+xtel for Debian
+----------------------
+
+XTel is an X emulator of the French Minitel.
+
+The Minitel is a dedicated terminal for accessing the Teletel,
+the French videotex network.
+
+The French Teletel network was created in 1980 by France Telecom, French
+telecommunications operator. With it more than 20 million users can access
+more than 25,000 on-line services. Users are billed as part of their telephone
+bill, and France Telecom pays the service provider the appropriate amount
+according to service usage and level (~0.10FF/mm - ~10.00FF/mm).
+
+How can you see examples of videotex screenshots:
+* Look at /usr/share/doc/xtel/xtel.png
+* Select "charge enregistrement" in "Fichier" menu. Choose a file 
+  in /usr/share/doc/xtel/examples. Select "Lecteur" in "Enregistrement" menu...
+  You can now push the button "play".
+
+There is a Internet/Teletel gateway: see http://www.minitel.fr
+(XTel can now use this gateway but this service isn't free...)
+
+Before using xtel, the X font server must be restarted as Xtel needs
+special fonts to work. These fonts are installed along with the package.
+
+Please note that the I-Minitel configuration needs initial checking.
+Check /etc/ppp/peers/iminitel for modem options (line, speed, ...) 
+before trying your first connection to i-iminitel server.  Your may
+also need to enable this service in /etc/xtel/services.
+
+
+This Readme has been written by Christophe Le Bars <clebars@debian.org>
+and completed by Christian Perrier <bubulle@debian.org>.
+
+ -- Christian Perrier <bubulle@debian.org>, Sun, 18 Feb 2007 19:41:49 z
+

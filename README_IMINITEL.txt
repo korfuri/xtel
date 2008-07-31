@@ -38,7 +38,7 @@ connexion effective au service Minitel (le plus souvent par modem).
 
 Dans le cas de I-Minitel, la connexion au service est TCP/IP d'un bout à
 l'autre et la machine supportant xteld aura un role de routeur d'accès aux
-services I-Minitel. En particuliers:
+services I-Minitel. En particulier:
 
    * Le premier client xtel initialise la connexion PPP de xteld vers le
      serveur 3622. xteld mets alors en place la route vers le serveur
@@ -64,11 +64,12 @@ la connexion PPP. Ce script est localisé au même endroit que le fichier
 xtel.services (répertoire /usr/X11R6/lib/X11/xtel). Les fichiers de
 configuration pppd sont les suivants:
 
- /etc/ppp/ip-up.iminitel  Script d'initialisation de la route I-Minitel,
+ /etc/ppp/ip-up.d/iminitel  Script d'initialisation de la route I-Minitel,
                           exécuté à la connexion
 
- /etc/ppp/ip-down.iminitelScript exécuté lors de la coupure de connexion
+ /etc/ppp/ip-down.d/iminitel Script exécuté lors de la coupure de connexion
                           I-Minitel
+
                           Chat-script de composition, contient le numéro
  /etc/ppp/chat-iminitel   d'appel 3622 et les caractéristiques
                           de la connexion PPP (login/password)

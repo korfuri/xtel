@@ -87,7 +87,7 @@ int *pl, *pc;
      */
     strcpy (master, "/dev/ptmx");
     if ((fd_master = open ("/dev/ptmx", O_RDWR)) < 0)
-	teleinfo_fatal ("/dev/ptmx", sys_errlist[errno]);
+	teleinfo_fatal ("/dev/ptmx", strerror(errno));
     sighold (SIGCLD);
     if (grantpt (fd_master) == -1)
 	teleinfo_fatal ("could not grant slave pty");
@@ -157,7 +157,7 @@ char *nom;
 	teleinfo_fatal ("erreur ouverture maitre");
 
     if ((fd_teleinfo = open (pty_s, O_RDWR)) < 0)
-	teleinfo_fatal (pty_s, sys_errlist[errno]);
+	teleinfo_fatal (pty_s, strerror(errno));
 
     /* Configuration de la ligne (mode RAW) */
 #ifdef SVR4    

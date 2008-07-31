@@ -22,6 +22,11 @@
 #ifndef _global_h
 #define _global_h
 
+/*
+ * pour récupérer la config globale du programme
+ */
+#include "Config.tmpl"
+
 #ifndef EXTERN
 #define EXTERN extern
 #endif 
@@ -203,10 +208,9 @@ char *build_name();
 /* 
  * Variables 
  */
-#ifndef __FreeBSD__
-#ifndef __GLIBC__
+#ifndef HAS_STRERROR
 extern char *sys_errlist[];
-#endif
+#define strerror(e) (sys_errlist[e])
 #endif
 
 /* xtel.c */

@@ -241,7 +241,7 @@ int fd;
 		  fclose (fp);
 		}
 		else
-		  fprintf (stderr, "run_procedure: %s: %s\n", (current_pd->p).filename, sys_errlist[errno]);
+		  fprintf (stderr, "run_procedure: %s: %s\n", (current_pd->p).filename, strerror(errno));
 	      }
 	    break;
 
@@ -255,7 +255,7 @@ int fd;
 		  fclose (fp);
 		}
 		else
-		  fprintf (stderr, "run_procedure: %s: %s\n", (current_pd->p).filename, sys_errlist[errno]);
+		  fprintf (stderr, "run_procedure: %s: %s\n", (current_pd->p).filename, strerror(errno));
 	      }
 
 	    break;

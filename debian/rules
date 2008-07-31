@@ -1,0 +1,109 @@
+#!/usr/bin/make -f
+# Sample debian/rules that uses debhelper.
+# GNU copyright 1997 to 1999 by Joey Hess.
+
+# Uncomment this to turn on verbose mode.
+export DH_VERBOSE=0
+
+build: build-stamp
+build-stamp:
+	dh_testdir
+
+	# Add here commands to compile the package.
+	# $(MAKE)
+
+	# Imake commands
+	xmkmf
+	make Xtel
+	# convert the mean gif file into a png file
+	gif2png xtel.gif
+	touch build-stamp
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp
+	
+	# Add here commands to clean up after the build process.
+	[ ! -f Makefile ] || $(MAKE) clean
+	rm -f xtel.png
+	find . -name Makefile -print | xargs rm -f
+	dh_clean
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	dh_installdirs
+
+	# Add here commands to install the package into debian/xtel.
+	$(MAKE) install DESTDIR=`pwd`/debian/xtel
+	# Install the examples
+	#install -m 644 exemples/*.vdt debian/xtel/usr/share/doc/xtel/examples/
+	dh_installexamples exemples/*.vdt
+	# Install font support and fonts
+	install -m 644 fonts/fonts.alias debian/xtel/etc/X11/fonts/misc/xtel.alias
+	install -m 644 fonts/*.pcf.gz debian/xtel/usr/share/fonts/X11/misc/
+	# Install app-default for xtel
+	install -m 644 XTel-color debian/xtel/etc/X11/app-defaults/
+	# Install logrotate conf file
+	install -m 644 debian/logrotate.conf debian/xtel/etc/logrotate.d/xtel
+	# Remove non-standard font directory
+	rm -rf debian/xtel/usr/share/fonts/X11/xtel
+	# Install french documentation in the french docs directory
+	install -m 644 debian/index-fr.html debian/xtel/usr/share/doc/LANG/fr/xtel/index.html
+	perl -MMIME::Base64  -ne 'print decode_base64($$_)' < debian/bullet.gif.base64 > debian/xtel/usr/share/doc/LANG/fr/xtel/bullet.gif
+	install -m 644 HISTOIRE.txt debian/xtel/usr/share/doc/LANG/fr/xtel/
+	install -m 644 LISEZMOI.txt debian/xtel/usr/share/doc/LANG/fr/xtel/
+	install -m 644 FAQ.txt debian/xtel/usr/share/doc/LANG/fr/xtel/
+	install -m 644 README_IMINITEL.txt debian/xtel/usr/share/doc/LANG/fr/xtel/
+	gzip -9v debian/xtel/usr/share/doc/LANG/fr/xtel/*.txt
+	# Install png image example
+	install -m 644 xtel.png debian/xtel/usr/share/doc/xtel/
+	# Create a symlink in /usr/share/doc/xtel to the french doc directory
+	ln -s ../LANG/fr/xtel debian/xtel/usr/share/doc/xtel/fr
+	#rm -f debian/xtel/usr/X11R6/lib/X11/app-defaults
+	touch install-stamp
+
+# Build architecture-independent files here.
+binary-indep: build install
+# We have nothing to do by default.
+
+# Build architecture-dependent files here.
+binary-arch: build install
+#	dh_testversion
+	dh_testdir
+	dh_testroot
+	dh_installdebconf	
+	dh_installdocs
+	dh_installexamples
+	dh_installmenu
+	dh_installxfonts
+#	dh_installemacsen
+#	dh_installpam
+#	dh_installinit
+	dh_installcron
+	dh_installman xteld.man
+	# install xtel man page under X11 directory tree
+	dh_installman xtel.man
+	dh_installinfo
+	install -d -m 755 debian/xtel/usr/share/doc-base
+	install -m 644 debian/doc-base debian/xtel/usr/share/doc-base/xtel
+#	dh_undocumented
+	dh_installchangelogs 
+	dh_link
+	dh_strip
+	dh_compress
+	dh_fixperms
+# You may want to make some executables suid here.
+#	dh_suidregister
+#	dh_makeshlibs
+	dh_installdeb
+#	dh_perl
+	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary install

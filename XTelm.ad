@@ -10,7 +10,7 @@
 
 XTelm*serveur:			localhost
 XTelm*commandeImpression:	pnmflip -r90 %s | pnmtops | lpr -h
-XTelm*commandeImpressionAscii:	a2ps %s | lpr -h
+XTelm*commandeImpressionAscii:	a2ps -o - %s | lpr -h
 XTelm*petiteFonte:		False
 XTelm*nomService:		xtel
 ! Type d'arret: 0=Pas d'arret, 1=Form Feed, 2=SUITE, 3=SUITE ou Form Feed

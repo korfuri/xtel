@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # $Id: make_xtel_lignes.sh,v 1.5 2001/02/11 19:27:59 pierre Exp $
 
 # Détection des modems
@@ -27,10 +27,8 @@ if [ "$M" = "" ]; then
     exit 1
 fi
 
-if [ -r $XTEL_LIGNES ]; then
-    echo "Copie de l'ancien $XTEL_LIGNES sur ${XTEL_LIGNES}.$$"
-    mv $XTEL_LIGNES ${XTEL_LIGNES}.$$
-fi
+NEW_XTEL_LIGNES=$XTEL_LIGNES.$$
+rm -f $NEW_XTEL_LIGNES
 
 j=0
 for i in 0 1 2 3
@@ -111,9 +109,9 @@ do
 		echo -n "Quel votre préfixe d'appel (exemple: 0w) ? "
 		read c < /dev/tty	
 		    
-		echo "# $m $MDM" >> $XTEL_LIGNES
-		echo "modem${j}${2}/dev/${TTYLINE}${2}$3${2}7${2}E${2}$4 atdt$c\\T\\r CONNECT${2}30" | sed -e 's/-/ /g' >> $XTEL_LIGNES
-		echo >> $XTEL_LIGNES
+		echo "# $m $MDM" >> $NEW_XTEL_LIGNES
+		echo "modem${j}${2}/dev/${TTYLINE}${2}$3${2}7${2}E${2}$4 atdt$c\\T\\r CONNECT${2}30" | sed -e 's/-/ /g' >> $NEW_XTEL_LIGNES
+		echo >> $NEW_XTEL_LIGNES
 		j=`expr $j + 1`
 	    else
 		sleep 1
@@ -121,7 +119,11 @@ do
 	fi
 done
 
-if [ ! -r $XTEL_LIGNES -a -r ${XTEL_LIGNES}.$$ ]; then
-    echo "Aucun modem détecté, restauration du $XTEL_LIGNES"
-    mv ${XTEL_LIGNES}.$$ $XTEL_LIGNES
+if [ ! -r $NEW_XTEL_LIGNES ]; then
+    echo "Aucun modem détecté."
+else
+    if [ $j -gt 1 ]; then s="s"; fi
+    echo "$j modem$s détecté$s, création du $XTEL_LIGNES"
+    if [ -f $XTEL_LIGNES ]; then mv ${XTEL_LIGNES} $XTEL_LIGNES.old ; fi
+    mv $NEW_XTEL_LIGNES $XTEL_LIGNES
 fi

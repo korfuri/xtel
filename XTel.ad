@@ -10,7 +10,7 @@
 
 XTel*serveur:			localhost
 XTel*commandeImpression:	pnmflip -r90 %s | pnmtops | lpr -h
-XTel*commandeImpressionAscii:	a2ps %s | lpr -h
+XTel*commandeImpressionAscii:	a2ps -o - %s | lpr -h
 XTel*petiteFonte:		False
 XTel*nomService:		xtel
 XTel*font:			-*-helvetica-medium-r-*-*-14-*-*-*-*-*-iso8859-1

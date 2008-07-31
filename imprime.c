@@ -28,26 +28,49 @@ static void imprime_page_courante (mode)
 int mode;
 {
     FILE *fp;
-    char cmd[256], n[256];
+    int fd = -1;
+    char cmd[256];
+    char n[] = "/var/tmp/xtelXXXXXX";
+    /* crée le fichier de telle façon qu'il soit impossible de le détourner
+     * avec un lien symbolique préalablement établi.
+     */
+#ifdef HAS_MKSTEMP
+    fd = mkstemp(n);
+#else
+    if (mktemp(n) != NULL)
+	fd = open (n, O_CREAT | O_EXCL | O_WRONLY, 0600);
+#endif
 
-    sprintf (n, "/tmp/xtel%d.ppm", getpid());
-    if ((fp = fopen (n, "w")) == NULL) {
+    if (fd < 0) {
 	perror (n);
-	exit (1);
     }
+    else if ((fp = fdopen( fd, "wb" )) == NULL) {
+	close (fd);
+	unlink (n);
+	perror (n);
+    }
+    else {
+	if (mode == VIDEOTEX) {
+	    videotexDumpScreen (ecran_minitel, fp);
+#ifdef HAS_SNPRINTF
+	    snprintf (cmd, sizeof(cmd), rsc_xtel.commandeImpression, n);
+#else
+	    sprintf (cmd, rsc_xtel.commandeImpression, n);
+#endif
+	}
+	else { /* ASCII */
+	    videotexConversionAscii (ecran_minitel, fp);
+#ifdef HAS_SNPRINTF
+	    snprintf (cmd, sizeof(cmd), rsc_xtel.commandeImpressionAscii, n);
+#else
+	    sprintf (cmd, rsc_xtel.commandeImpressionAscii, n);
+#endif
+	}
 
-    if (mode == VIDEOTEX) {
-	videotexDumpScreen (ecran_minitel, fp);
-	sprintf (cmd, rsc_xtel.commandeImpression, n);
+	fclose (fp);
+	system (cmd);
+	unlink (n);
     }
-    else { /* ASCII */
-	videotexConversionAscii (ecran_minitel, fp);
-	sprintf (cmd, rsc_xtel.commandeImpressionAscii, n);
-    }
-
-    fclose (fp);
-    system (cmd);
-    unlink (n);
 }
 
 void imprime_page_courante_ascii (w, client_data, call_data)

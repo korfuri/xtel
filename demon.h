@@ -96,6 +96,7 @@ struct definition_ligne {
     char *chat;			/* chat-script */
     char type_dialer;		/* type du dialer */
     int delai;			/* timeout du dialogue Modem */
+    int tempo;			/* tempos entre ioctl (pour vieux modems) en µs */
 };
 
 /*
@@ -132,8 +133,10 @@ struct definition_ligne {
 #endif /* NO_NETWORK */
 
 /* Fichier d'état I-Minitel */
-#define IMINITEL_FILE            "/tmp/.iminitel"
+#define IMINITEL_FILE            "/var/run/iminitel"
 #define IMINITEL_TIMEOUT         45
+/* Fichier de lock de la session PPP I-Minitel */
+#define IMINITEL_LOCKFILE        "/var/run/ppp-iminitel.pid"
 
 /* Base /proc */
 #define PROC_BASE                "/proc"

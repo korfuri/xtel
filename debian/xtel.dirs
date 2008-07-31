@@ -1,0 +1,8 @@
+etc/xtel
+etc/logrotate.d
+usr/sbin
+usr/share/fonts/X11/misc
+etc/X11/fonts/misc
+usr/share/doc/LANG/fr/xtel
+usr/share/doc/xtel/examples
+etc/X11/app-defaults

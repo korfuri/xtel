@@ -1,6 +1,6 @@
 .\" Copyright (c) 1991-98 Lectra-Systemes
 .\" $Id: xtel.man,v 1.10 1998/10/02 15:09:58 pierre Exp $
-.TH XTEL n "Lectra-Systemes" "10/98"
+.TH XTEL 1 "Lectra-Systemes" "10/98"
 .UC 5
 .SH NOM
 xtel \- Emulateur MINITEL 

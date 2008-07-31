@@ -3,3 +3,4 @@ connect '/usr/sbin/chat -v -f /etc/ppp/chat-iminitel'
 noauth
 lock
 idle 120
+linkname iminitel

@@ -25,6 +25,7 @@ static char rcsid[] = "$Id: config.c,v 1.14 1998/10/16 08:49:01 pierre Exp $";
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #ifdef USE_SYSLOG
 #include <syslog.h>
 #endif /* USE_SYSLOG */
@@ -205,7 +206,7 @@ lecture_configuration_lignes ()
 {	
     FILE *fp;
     register int i;
-    char *p, sep[2] = {0, 0};
+    char *p, sep[3] = {0, 0, 0};
 
     if ((fp = fopen (FICHIER_DEFINITION_LIGNES, "r")) == NULL) {
       sprintf (buf, "Erreur a l'ouverture du fichier %s", FICHIER_DEFINITION_LIGNES);
@@ -300,11 +301,27 @@ lecture_configuration_lignes ()
 	    definition_lignes[i].type_dialer = DIALER_MODEM;	    
 	}
 
-	definition_lignes[i].delai = atoi (next_token (NULL, "\n"));
+	/*
+	 * Ajoute NL à la liste des séparateurs pour autoriser une fin de ligne
+	 * après le champ délai
+	 */
+	sep[1] = '\n';
+	definition_lignes[i].delai = atoi (next_token (NULL, sep));
 
-#ifdef DEBUG_XTELD1
+	/*
+	 * colonne 8 = tempo entre 2 ioctls (pour vieux modems)
+	 * 0 par défaut, i.e. colonne non présente.
+	 * saisie en millisecondes, stockage en microsecondes.
+	 */
+	p = next_token (NULL, "\n");
+	if (isdigit(*p))
+	    definition_lignes[i].tempo = atoi(p)*1000;
+	else
+	    definition_lignes[i].tempo = 0;
+
+#ifdef DEBUG_XTELD
 	if (!flag_old_config)
-	    log_debug ("LIGNES: %s %s %d %d %d >%s< %d", definition_lignes[i].device, definition_lignes[i].nom, definition_lignes[i].speed, definition_lignes[i].cs, definition_lignes[i].parity, definition_lignes[i].chat, definition_lignes[i].delai);
+	    log_debug ("LIGNES: %s %s %d %d %d >%s< %d (%d)", definition_lignes[i].device, definition_lignes[i].nom, definition_lignes[i].speed, definition_lignes[i].cs, definition_lignes[i].parity, definition_lignes[i].chat, definition_lignes[i].delai, definition_lignes[i].tempo);
 	else
 	    log_debug ("LIGNES: %s %s %d", definition_lignes[i].nom, definition_lignes[i].chat, definition_lignes[i].delai);
 #endif

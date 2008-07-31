@@ -1,0 +1,2 @@
+?package(xtel):needs="X11" section="Applications/Network/Communication" \
+  title="Xtel" command="/usr/bin/xtel"

@@ -17,7 +17,7 @@
 #define INSTALLDEMON
 
 /* Pour générer avec OSF-Motif */
-/*#define MOTIF*/
+#define MOTIF
 
 /* Pour ne pas utiliser TERMIO */
 /*#define NO_TERMIO*/
@@ -44,10 +44,23 @@
 /*#define NO_TVR*/
 
 /* Pour debug du demon "xteld" */
-#define DEBUG_XTELD
+/*#define DEBUG_XTELD*/
 
 /* Pour la distribution RedHat Linux */
-#define REDHAT
+/*#define REDHAT*/
+
+/* Pour la distribution Debian/GNU-Linux */
+#define DEBIAN
 
 /* Pas de popup-menu (pb LessTif) */
 #define DONT_USE_POPUP
+
+/* Ne pas définir pour utiliser mktemp() au lieu de mkstemp() */
+#define HAS_MKSTEMP
+
+/* Pour éviter les dépassements de capacité des buffers si l'OS le permet */
+#define HAS_SNPRINTF
+
+/* en remplacement de sys_errlist[] si possible */
+#define HAS_STRERROR
+

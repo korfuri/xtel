@@ -46,7 +46,7 @@ xset +fp le_repertoire_des_fontes_Xtel
 
 Dans le cas de XFree86, le mieux est d'ajouter la ligne :
 
-FontPath    "/usr/X11R6/lib/X11/fonts/xtel/"
+FontPath    "/usr/share/fonts/X11/xtel/"
 
 dans le fichier XF86Config et de relancer le serveur.
 

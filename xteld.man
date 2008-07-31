@@ -1,6 +1,6 @@
 .\" Copyright (c) 1991-98 Lectra-Systemes
 .\" $Id: xteld.man,v 1.10 2001/02/11 00:11:35 pierre Exp $
-.TH XTELD n "Lectra-Systemes" "10/98"
+.TH XTELD 8 "Lectra-Systemes" "10/98"
 .UC 5
 .SH NOM
 xteld \- démon de l'émulateur Minitel XTEL
@@ -23,7 +23,7 @@ Edition) comment client à la place de "xtel"
 
 .SH UTILISATION
 .LP
-\fIxteld\fP utilise le fichier \fB"/usr/X11R6/lib/X11/xtel/xtel\.services"\fP
+\fIxteld\fP utilise le fichier \fB"/usr/X11R6/lib/X11/xtel/xtel.services"\fP
 (sous Xfree86) qui contient la liste des services disponibles sous la forme :
 .sp
 .I "[Nom du device,]"
@@ -116,7 +116,7 @@ La dernière ligne définit une possibilité de numéro de téléphone
 (mot\-clé \fIDirect\fP), l'utilisateur saisira directement le numéro lors de la 
 composition dans \fIxtel\fP.
 .LP
-On utilise également le fichier \fB"/usr/X11R6/lib/X11/xtel/xtel\.lignes"\fP
+On utilise également le fichier \fB"/usr/X11R6/lib/X11/xtel/xtel.lignes"\fP
 qui définit les lignes disponibles et la procédure de composition. Ce fichier est de
 la forme :
 .sp
@@ -128,7 +128,8 @@ la forme :
 .I "[Parité,]"
 .I "chat-script avec le modem"
 ,
-.I "delai maxi de réponse du modem en secondes."
+.I "delai maxi de réponse du modem en secondes"
+.I "[,temporisation entre commandes en millisecondes.]"
 .sp
 Et ce pour chaque ligne utilisable. Si le premier champs (nom du device) est répété
 sur plusieurs lignes, cela signifie que plusieurs modem physiques sont associés au
@@ -157,15 +158,21 @@ Si le chat-script est remplace par la chaine \fIminitel2\fP, la ligne est defini
 comme utilisant un \fBMinitel 2\fP comme modem.
 .sp
 Si le chat-script est remplace par la chaine \fIminitel1\fP, la ligne est définie
-comme utilisant un \fBMinitel 1/1B\fI comme modem. A ce moment la, le menu "Services"
+comme utilisant un \fBMinitel 1/1B\fP comme modem. A ce moment la, le menu "Services"
 ne sera pas affiché dans xtel et l'utilisateur devra composer son numéro à la main
 (le M1/M1B ne sachant théoriquement pas composer de numéro).
+.sp
+Le champ temporisation est optionnel et peut contenir une durée (en ms)
+d'attente entre l'envoi de chaque commande au modem dans la phase
+d'initialisation.  Il permet un meilleur support de certains anciens modems qui
+n'acceptaient pas de recevoir un flot de commande trop rapide.  S'il n'est pas
+précisé, aucune temporisation n'est effectuée (c'est le comportement standard de \fIxteld\fP).
 .sp 2
 .B "Exemples :"
 .in +10
 .nf
 /dev/cua0,\\dat\\r OK atdt\\T\\r CONNECT,30
-v23,/dev/cua1,1200,7,E,\\dat\\r OK atdt\\T\\r CONNECT,30
+v23,/dev/cua1,1200,7,E,\\dat\\r OK atdt\\T\\r CONNECT,30,250
 tvr,/dev/cua2:rtscts,9600,8,N,\\dat\\r OK atdt\\T\\r CONNECT,30
 .fi
 .in -10
@@ -187,6 +194,12 @@ Le délai de reponse du modem est de
 .I 30
 secondes maxi. Si le délai est dépassé, \fIxteld\fP essayera sur la ligne suivante du fichier
 jusqu'à un succès ou la fin du fichier.
+.sp
+La ligne
+.I v23
+déclare aussi une temporisation de
+.I 250ms
+entre chaque commande transmise au modem.
 .sp
 .B "Remarques :"
 .sp

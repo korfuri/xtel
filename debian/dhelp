@@ -1,0 +1,16 @@
+<item>
+<directory>fr/comm
+<linkname>XTel, Emulateur Minitel sous X11
+<filename>fr/index.html
+<description>
+XTEL permet d'émuler un Minitel 1B, 2 ou TVR (Télétel Vitesse Rapide)
+sur un terminal X, ou une station de travail couleur, monochrome ou à
+niveaux de gris.
+Il est utilisable en réseau, c'est-à-dire qu'une des machines
+du réseau commande les MODEMS et dialogue avec les services Télétel, les
+utilisateurs de XTEL dialoguent avec cette machine "serveur" par socket
+internet (utilisation d'un service TCP et du super-démon "inetd").
+XTEL implémente désormais le protocole I-Minitel du 3622 (plus de détails sur
+http://www.i-minitel.com).
+</description>
+</item>

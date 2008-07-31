@@ -868,7 +868,7 @@ char *s;
 int code_erreur;
 {
     if (code_erreur != 0)
-	sprintf (buf, "%s : %s", s, sys_errlist[code_erreur]);
+	sprintf (buf, "%s : %s", s, strerror(code_erreur));
     else {
       if (s[0] == '[')
 	strcpy (buf, rsc_xtel.erreur[s[1]-'0']);

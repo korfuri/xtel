@@ -64,6 +64,7 @@ static char rcsid[] = "$Id: xteld.c,v 1.33 2001/02/13 09:40:49 pierre Exp $";
 #include <time.h>
 #include <signal.h>
 #include <string.h>
+#include <fcntl.h>
 
 #ifdef NO_TERMIO
 #include <sgtty.h>
@@ -204,9 +205,13 @@ static int read_iminitel_file ()
   char buf[256];
 
   if (stat (IMINITEL_FILE, &statb) < 0) {
-    /* Ne devrait pas arriver */
-    erreur_a_xtel (IMINITEL_FILE, errno);
-    exit (1);
+    if (errno != ENOENT) {
+      /* Ne devrait pas arriver */
+      erreur_a_xtel (IMINITEL_FILE, errno);
+      exit (1);
+    }
+    else
+      return 0;
   }
 
   /* Fichier non vide, on lit les parametres */
@@ -272,7 +277,7 @@ int code_erreur;
     }
     else if (type_client == CLIENT_W_HYPER) {
       if (e)
-	sprintf (buf, "%s: %s", s, sys_errlist[errno]);
+	sprintf (buf, "%s: %s", s, strerror(errno));
       else {
 	if (*s == '[')
 	  strcpy (buf, s + 3);
@@ -435,10 +440,12 @@ static void deconnexion ()
 	/* signal a XTEL la deconnexion */
 	write (XTELD_OUTPUT, CHAINE_REPONSE_DECONNEXION, 1);
 	
+#if 0 /* symlink attack vulnerability */
 	/* supprime le fichier de log */
 	sprintf (buf, "/tmp/.xtel-%s", utilisateur);
 	unlink (buf);
-	
+#endif
+
 	if ((fplog= fopen(FICHIER_LOG, "a")) != NULL) {
 	    long t= time(0), duree;
 	    char *at= ctime(&t);
@@ -696,7 +703,7 @@ char *service_teletel;
       if (!strncmp (device_associe, "@tcp", 4) || !strncmp (device_associe, "@imi", 4)) {
 	char *tcp_port;
 	int maxtime;
-	struct stat statb;
+	int fd;
 
 	/* Valide la saisie */
 	saisie_active = 1;
@@ -708,17 +715,63 @@ char *service_teletel;
 	if (!strncmp (device_associe, "@imi", 4)) {
 	  strcpy (iminitel_script, code_teletel);
 
-	  /* Si pas deja connecte, on lance la connexion */
-	  if (stat (IMINITEL_FILE, &statb) < 0) {
-	    /* Execution du script de connexion avec option 'start' */
-	    sprintf (buf, "%s/%s start", XTEL_LIBDIR, iminitel_script);
+	  /* On vérifie si déjà connecté (i.e. existence du fichier lock
+	   * /var/run/ppp-iminitel.pid qui contient le pid du processus ppp
+	   * normalement encore actif) */
+	  fd = open( IMINITEL_LOCKFILE, O_RDONLY );
+	  if (fd >= 0) {
+	      /* le fichier existe : voir si le programme qui l'a créé existe toujours */
+	      char buf[20];
+	      int n;
+	      /* lit la première ligne contenant le PID du processus qui l'a créé */
+	      n = read( fd, buf, sizeof(buf) );
+	      close( fd );
+	      if (n > 0) {
+		  /* récupère le PID */
+		  pid_t pid;
+		  buf[n] = '\0';
+		  pid = (pid_t)atoi( buf );
+		  /* teste l'existence du processus ayant créé le fichier */
+		  if (pid == 0 || (kill(pid,0) == -1 && errno == ESRCH)) {
+		      if (unlink(IMINITEL_LOCKFILE) == 0) {
 #ifdef DEBUG_XTELD
-	    log_debug ("execute: %s", buf);
+			  log_debug ("Removed stale lock %s (pid %d)", IMINITEL_LOCKFILE, pid);
 #endif
-	    if (system (buf) != 0) {
-	      erreur_a_xtel (buf, errno);
-	      exit (1);
-	    }
+			  /* et on redémarrera la connexion ppp */
+			  fd = -1;
+		      }
+		      else {
+			  erreur_a_xtel (IMINITEL_LOCKFILE, errno);
+			  return;
+		      }
+		  }
+		  else {
+		      /* le processus existe encore -> connexion supposée active */
+		  }
+	      }
+	  }
+	  else if (errno != ENOENT) {
+	      /* il ne vient pas d'être effacé par un autre programme */
+	      /* c'est donc un vrai problème */
+	      erreur_a_xtel (IMINITEL_LOCKFILE, errno);
+	      return;
+	  }
+	  /* Si pas deja connecte, on lance la connexion */
+	  if (fd < 0) {
+	      /* Effacer éventuellement le fichier d'état I-Minitel */
+	      if (unlink( IMINITEL_FILE ) < 0 && errno != ENOENT) {
+		  erreur_a_xtel( IMINITEL_FILE, errno );
+		  return;
+	      }
+	      /* Execution du script de connexion avec option 'start' */
+	      sprintf (buf, "%s/%s start", XTEL_LIBDIR, iminitel_script);
+#ifdef DEBUG_XTELD
+	      log_debug ("execute: %s", buf);
+#endif
+	      if (system (buf) != 0) {
+		  erreur_a_xtel (buf, errno);
+		  exit (1);
+	      }
 	  }
 
 	  /* Temps maxi d'attente de connexion */
@@ -1006,6 +1059,7 @@ char *service_teletel;
     signal(SIGTERM, SIG_DFL);
 
     /* creation du fichier de log */
+#if 0 /* symlink attack vulnerability */
     sprintf (buf, "/tmp/.xtel-%s", utilisateur);
     if ((fplog = fopen (buf, "w"))) {
 #ifdef DEBUG_XTELD
@@ -1019,6 +1073,7 @@ char *service_teletel;
 	fprintf (fplog, "SERVICE = %s\n", service);
 	fclose (fplog);
     }
+#endif
     
     if ((fplog= fopen(FICHIER_LOG, "a")) != NULL) {
 	char *at;

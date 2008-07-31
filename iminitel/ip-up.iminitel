@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # $Id: ip-up.iminitel,v 1.1 2001/02/05 09:34:59 pierre Exp $
 # I-Minitel
 if [ "$6" = "iminitel" ]; then
@@ -19,10 +19,14 @@ if [ "$6" = "iminitel" ]; then
 	shift
 	i=`expr $i + 1`
     done
-    /sbin/route add -host $1 gw ${IMINITEL_ADDR}
-    cat <<EOF > /tmp/.iminitel
-IMINITEL_SERVER=$1
+    /sbin/route add -host ${1} gw ${IMINITEL_ADDR}
+    # crée le fichier d'état I-Minitel.
+    # Utilise un nommage temporaire pour être sûr que tout son contenu sera
+    # disponible lors de la lecture (asynchrone) par xteld.
+    cat <<EOF > /var/run/iminitel.tmp
+IMINITEL_SERVER=${1}
 IMINITEL_INTERFACE=${IMINITEL_INTERFACE}
 EOF
+    mv /var/run/iminitel.tmp /var/run/iminitel
 fi
 

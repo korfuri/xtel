@@ -1,0 +1,181 @@
+The XTEL FAQ
+
+Here are some of the frequently asked questions about Xtel.
+
+Can I use Xtel for commercial purposes?
+When I start Xtel, I get an error message about the fonts'loading
+what should I do?
+Can I use Xtel without having TCP/IP?
+How do I specify a xteld server name?
+When I start Xtel, I receive "Erreur de connexion au serveur XTEL...", what
+should I do?
+The modem dos not connect to, what should I do?
+Which modems are supported by Xtel?
+Could I use TVR with Xtel?
+The modem does not dial, what should I do?
+Is there an english version of Xtel?
+Is there a Windows version of the Xtel client?
+Can I find any binary distributions of Xtel?
+Where can I get information on Xtel?
+Is Xtel I-Minitel compatible?
+The xtel program installed from .rpm package does not work on my system, what
+should I do?
+How to customize Xtel key shortcuts?
+------------------------------------------------------------------------------
+
+* Can I use Xtel for commercial purposes?
+
+Xtel is distributed under the terms of the GNU General Public License which
+allows you this kind of use. The main restriction is to distribute the source
+code if you decide to sell Xtel.
+
+* When I start Xtel, I get an error message about the fonts loading
+what should I do ?
+
+Read the README!
+
+Xtel uses special fonts which are normally installed by the "make install"
+command. To make these fonts recognized by X launch :
+
+xset +fp directory_where_the_fonts_are
+
+If you use XFree86, it is better to add this
+
+FontPath    "/usr/share/fonts/X11/xtel/"
+
+in XF86Config and reload the server.
+
+* Can I use Xtel without having TCP/IP?
+
+No, there is no more NO_NETWORK option since 3.3.0 release.
+
+This flag does not exists anymore because LINUX and all other UNIX systems xtel
+can run on supports TCP/IP protocol. The loopback interface (named lo on LINUX,
+address 127.0.0.1) can support all Xtel communication needs, therefore there is
+no requirements on the availibitily of a connection to a local network or to
+the Internet.
+
+Moreover, this flag was sometimes misinterpreted by users which sent annoying
+emails to the author!
+
+* How do I specify a xteld server name?
+
+The default server name is localhost. This is the appropriate configuration
+when the server and the client run on the same computer. There are 
+different ways to change the name :
+	* When you launch Xtel use the -serveur option
+	* In the X Ressources file add this line
+	
+	xtel*serveur: the_server
+
+* When I start Xtel, I receive "Erreur de connexion au serveur XTEL...", what
+should I do?
+
+The specified server is not available using TCP/IP or the xteld daemon is not
+correctly installed (read the LISEZMOI concerning the modification of
+/etc/services and /etc/inetd.conf). Warning, if you use TCP/IP, the xteld
+daemon MUST NEVER BE LAUNCHED MANUALLY (it will be launched by the inetd
+superserver)
+
+If Yellow Pages/NIS service is enabled, the xtel service shall be declared in
+the corresponding NIS map.
+
+* The modem dos not connect to, what should I do?
+
+See below.
+
+* Which modems are supported by Xtel?
+
+All modems supporting the V.23 protocol could be used with Xtel. Therefore all 
+modems which have been agreed by France Telecom should work. Watch out - the 
+V.23 mode of some modems (like USR ones) is disabled by default. In that case,
+use a correct AT command in xtel.lignes to enable it.
+
+Read carefully the README file which contains information about
+detecting/configuring modems.
+
+If your modem does not appear in the list, please DON'T ASK ME the right
+configuration to be used. I don't know it.
+
+   * Read the documentation supplied with your modem or ask the vendor about
+     the code sequence to switch to V23 mode.
+   * Or try to discover the right code sequence with using a terminal emulator.
+     Your mileage may vary.
+
+* Could I use TVR with Xtel?
+
+Yes, if you have a modem which supports it ! As far as I know, only some COM1 
+and Djinn Flash modems support it.
+
+[Image] Last news: TVR is accessible from I-Minitel, which is supported since
+the 3.3.0 release of XTel.
+
+* The modem does not dial, what should I do?
+
+	1. Add a \d (this is a delay) at the beginning of the dialing string in
+	xtel.ligne file. It makes the modem synchronize on the xteld speed.
+
+	2. If this does not help, uncomment the line
+
+	#define DEBUG_XTELD
+
+	in the Config.tmpl file. Xteld will then display debugging information on
+	/dev/console by default or use syslogd if you have enabled this option.
+
+* Is there an english version of Xtel?
+
+Not yet. The MINITELR is mainly used in France. However, the 3.1 version and
+newer should be very easy to translate because all messages are gathered in the
+ressources file Xtel-msg (or Xtelm-Msg for the Motif or Lesstif version).
+
+* Is there a Windows version of the Xtel client?
+
+No, but xteld can be used with Hyperterminal Private Edition 3.0 up to 5.0 from
+Hilgraeve.
+
+* Can I find any binary distributions of Xtel?
+
+Yes, but for some OSs only. Check out the xtel homepage.
+
+* Where can I get information on Xtel?
+
+In the french linux or x11 newgroups like fr.comp.os.linux.configuration or
+fr.comp.apps.x11. If you can't find any answers, you can email me :
+pierre@ai.alienor.fr
+
+* Is Xtel I-Minitel compatible?
+
+Yes. Customize the xtel.services configuration file as needed.
+
+* The xtel program installed from .rpm package does not work on my system, what
+should I do?
+
+Rebuild the .rpm binary package from its source .src.rpm:
+
+  rpm --rebuild xtel-3.3.0-1.src.rpm
+
+then install it again from /usr/src/redhat/RPMS/i386.
+
+* How to customize Xtel key shortcuts?
+
+Xtel is using standard translation tables, therefore adding lines like the
+following ones in your X11 resource file (.Xdefaults or alike) will be enough:
+
+xtel*ecran_minitel.translations: #override \n\
+Tab:       emission-commande(H) \n\
+BackSpace: emission-commande(G)
+
+Below is the mapping between Minitel keys and commands:
+ ENVOI         A
+ RETOUR        B
+ REPETITION    C
+ GUIDE         D
+ ANNULATION    E
+ SOMMAIRE      F
+ CORRECTION    G
+ SUITE         H
+ CONNEXION_FIN I
+-------------------------------------------------------------------------------
+This file has been (quickly) translated by Guillaume Morin
+<gemorin@attglobal.net>.
+Last update on 2001-08-19 by Eric Delaunay <delaunay@debian.org>.

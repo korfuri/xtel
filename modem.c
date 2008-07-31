@@ -61,7 +61,7 @@ static struct termio term_sauve, term;
 static struct termiox termx;
 #endif /* lectra && SVR4 && !sun || hpux */
 
-#ifndef SYSLOG
+#ifndef USE_SYSLOG
 static FILE *fp_console;
 #endif
 static char prefix[256];
@@ -89,13 +89,13 @@ void close_debug ()
 
 /* Syslog or not syslog ? */
 #ifdef USE_SYSLOG
-void log_debug (fmt, p1, p2, p3, p4, p5, p6, p7)
+void log_debug (fmt, p1, p2, p3, p4, p5, p6, p7, p8)
 char *fmt;
-int  p1, p2, p3, p4, p5, p6, p7;
+int  p1, p2, p3, p4, p5, p6, p7, p8;
 {
     char msg[256];
 
-    sprintf (msg, fmt, p1, p2, p3, p4, p5, p6, p7);
+    sprintf (msg, fmt, p1, p2, p3, p4, p5, p6, p7, p8);
     syslog (LOG_INFO, msg);
 }
 
@@ -105,12 +105,12 @@ char *s;
     syslog (LOG_ERR, s);
 }
 #else
-void log_debug (fmt, p1, p2, p3, p4, p5, p6, p7)
+void log_debug (fmt, p1, p2, p3, p4, p5, p6, p7, p8)
 char *fmt;
-int  p1, p2, p3, p4, p5, p6, p7;
+int  p1, p2, p3, p4, p5, p6, p7, p8;
 {
     fprintf (fp_console, "%s[%d] ", prefix, getpid());
-    fprintf (fp_console, fmt, p1, p2, p3, p4, p5, p6, p7);
+    fprintf (fp_console, fmt, p1, p2, p3, p4, p5, p6, p7, p8);
     fprintf (fp_console, "\n\r");
 }
 
@@ -123,7 +123,7 @@ char *s;
       if (*s != '%')
 	fputc (*s, fp_console);
       else if (*(s+1) == 'm') {
-	fprintf (fp_console, "%s", sys_errlist[errno]);
+	fprintf (fp_console, "%s", strerror(errno));
 	s++;
       }
 
@@ -151,13 +151,15 @@ int n;
 }
 
 /* Init des parametres de ligne */
-void init_tty (int fd, int speed, int csize, int parity, int flags, int dialer)
+void init_tty (int fd, int speed, int csize, int parity, int flags, int dialer, int tempo)
 {
 #ifdef NO_TERMIO
   ioctl (fd, TIOCGETP, &term);
+  usleep(tempo);
   memcpy ((char *)&term_sauve, (char *)&term, sizeof(struct sgttyb));
   term.sg_flags |= RAW;
   ioctl (fd, TIOCSETP, &term);
+  usleep(tempo);
 	
   /* Flags, pour l'instant RTS/CTS */
   /* FIXME: comment passer la ligne en RTS/CTS sans termio ? */
@@ -166,9 +168,11 @@ void init_tty (int fd, int speed, int csize, int parity, int flags, int dialer)
 
 #ifdef USE_TERMIOS
   ioctl (fd, TIOCGETA, &term);
+  usleep(tempo);
   memcpy ((char *)&term_sauve, (char *)&term, sizeof(struct termios));
 #else
   ioctl (fd, TCGETA, &term);
+  usleep(tempo);
   memcpy ((char *)&term_sauve, (char *)&term, sizeof(struct termio));
 #endif /* USE_TERMIOS */
 	
@@ -185,7 +189,8 @@ void init_tty (int fd, int speed, int csize, int parity, int flags, int dialer)
    */
   term.c_cflag &= ~(CSIZE|CSTOPB);
   term.c_cflag |= (CREAD|HUPCL);
-  term.c_ispeed = term.c_ospeed = speed;
+  cfsetispeed (&term, speed);
+  cfsetospeed (&term, speed);
 #else
   term.c_cflag &= ~(CSIZE|CBAUD|CLOCAL);
 
@@ -236,35 +241,44 @@ void init_tty (int fd, int speed, int csize, int parity, int flags, int dialer)
   /* Affectation des parametres */
 #ifdef USE_TERMIOS
   ioctl (fd, TIOCSETA, &term);
+  usleep(tempo);
 #else
   ioctl (fd, TCSETA, &term);
+  usleep(tempo);
 #endif /* USE_TERMIOS */
 #endif /* NO_TERMIO */
 }
 
 /* Restauration des parametres */
-void restore_tty (fd)
+void restore_tty (int fd)
 {
 #ifdef ultrix
   int temp = 0;
 #endif
+  int tempo = 0;
  
    /* remet la ligne en l'etat */
 #ifdef NO_TERMIO
   term.sg_ispeed = term.sg_ospeed = B0;
   ioctl (fd, TIOCSETP, &term);
+  usleep(tempo);
   ioctl (fd, TIOCSETP, &term_sauve);
+  usleep(tempo);
 #else
 #ifdef USE_TERMIOS
-  term.c_ispeed = B0;
-  term.c_ospeed = B0;
+  cfsetispeed (&term, B0);
+  cfsetospeed (&term, B0);
   ioctl (fd, TIOCSETAW, &term);
+  usleep(tempo);
   ioctl (fd, TIOCSETA, &term_sauve);
+  usleep(tempo);
 #else
   term.c_cflag &= ~CBAUD;
   term.c_cflag |= B0;
   ioctl (fd, TCSETAW, &term);
+  usleep(tempo);
   ioctl (fd, TCSETA, &term_sauve);
+  usleep(tempo);
 #endif /* USE_TERMIOS */
 #endif /* NO_TERMIO */
 #ifdef ultrix
@@ -277,10 +291,11 @@ void restore_tty (fd)
 /* 
  * Dialogue avec le Modem (chatons, chatons...)
  */
-int do_chat (fd, chat_script, tmax, telno, reply_buf, reply_size)
+int do_chat (fd, chat_script, tmax, tempo, telno, reply_buf, reply_size)
 int fd;
 char *chat_script;
 unsigned long tmax;
+int tempo;
 char *telno, *reply_buf;
 int reply_size;
 {
@@ -288,7 +303,6 @@ int reply_size;
     int i, erreur, fin, nbread, cmodem;
     char *pt_chat, c, *q;
 
-    delai_maxi.tv_sec = tmax;
     erreur = 0;
     pt_chat = chat_script;
     fin = 0;
@@ -307,16 +321,20 @@ int reply_size;
      *  (comme le Hayes Optima par exemple)...
      */
 #ifdef USE_TERMIOS
-    ioctl (fd, TCIOCGETA, &term);
+    ioctl (fd, TIOCGETA, &term);
+    usleep(tempo);
 #else
     ioctl (fd, TCGETA, &term);
+    usleep(tempo);
 #endif /* USE_TERMIOS */
     if ((term.c_cflag | CLOCAL) == 0) {
 	term.c_cflag |= CLOCAL;
 #ifdef USE_TERMIOS
-	ioctl (fd, TCIOCSETA, &term);
+	ioctl (fd, TIOCSETA, &term);
+	usleep(tempo);
 #else
 	ioctl (fd, TCSETA, &term);
+	usleep(tempo);
 #endif /* USE_TERMIOS */
 	cmodem = 1;
     }
@@ -475,6 +493,7 @@ int reply_size;
 	for (;;) {
 	    
 	    t_a_lire = a_lire;
+	    delai_maxi.tv_sec = tmax;
 	    nbread = select (32, &t_a_lire, NULL, NULL, &delai_maxi);
 
 	    /* Si il y a qque chose a lire */
@@ -565,9 +584,10 @@ int reply_size;
 		/* erreur read */
 		else {
 #ifdef DEBUG_XTELD
-		    log_debug ("Erreur read !");
+		    log_debug ("Erreur read ! (errno=%d)",errno);
 #endif
-		    erreur = 1;
+		    /*erreur = 1;*/
+		    if (++erreur > 10)
 		    break;
 		}
 	    }
@@ -592,9 +612,11 @@ int reply_size;
     if (cmodem) {
 	term.c_cflag &= ~CLOCAL;
 #ifdef USE_TERMIOS
-	ioctl (fd, TCIOCSETA, &term);
+	ioctl (fd, TIOCSETA, &term);
+	usleep(tempo);
 #else
 	ioctl (fd, TCSETA, &term);
+	usleep(tempo);
 #endif /* USE_TERMIOS */
     }
 #endif

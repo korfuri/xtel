@@ -26,6 +26,11 @@ typedef char Boolean;
 #define True	1
 #define False	0
 
+/*
+ * pour récupérer la config globale du programme
+ */
+#include "Config.tmpl"
+
 #ifndef EXTERN
 #define EXTERN extern
 #endif
@@ -33,10 +38,9 @@ typedef char Boolean;
 /*
  * Variables
  */
-#ifndef __FreeBSD__
-#ifndef __GLIBC__
+#ifndef HAS_STRERROR
 extern char *sys_errlist[];
-#endif
+#define strerror(e) (sys_errlist[e])
 #endif
 
 EXTERN struct definition_ligne definition_lignes[MAX_LIGNES]; 
@@ -74,9 +78,9 @@ int ian_valide (int, char);
 void ian_init (char*);
 
 /* modem.c */
-void init_tty (int, int, int, int, int, int);
+void init_tty (int, int, int, int, int, int, int);
 void restore_tty (int);
-int do_chat (int, char*, unsigned long, char*, char*, int);
+int do_chat (int, char*, unsigned long, int, char*, char*, int);
 void init_debug (char*);
 void close_debug (void);
 #else
