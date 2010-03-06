@@ -27,10 +27,6 @@ case "$1" in
 	    rm -f /usr/doc/LANG/fr/xtel
 	fi
 
-	if command -v install-docs >/dev/null 2>&1; then
-	    install-docs -r xtel
-	fi
-
         ;;
     failed-upgrade)
         ;;

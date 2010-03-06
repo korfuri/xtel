@@ -108,7 +108,7 @@ Dans cet exemple le service, le service d'\fIAnnuaire\fP est autorisé à tous
 pendant 180 secondes (tant que c'est gratuit !). Le \fITélétel3\fP est 
 accessible à tous les utilisateurs pendant 60 secondes, l'utilisateur 
 \fIuser2\fP y a droit pendant 120 secondes. Les connexions provenant de
-'linuxbox' ne sont autorisées qu'à 'user1'. Tous les utilisateurs de 'pcwin'
+"linuxbox" ne sont autorisées qu'à "user1". Tous les utilisateurs de "pcwin"
 ont droit au service.
 .PP
 La dernière ligne définit une possibilité de numéro de téléphone 
