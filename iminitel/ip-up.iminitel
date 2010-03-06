@@ -1,0 +1,28 @@
+#!/bin/bash
+# $Id: ip-up.iminitel,v 1.1 2001/02/05 09:34:59 pierre Exp $
+# I-Minitel
+if [ "$6" = "iminitel" ]; then
+    IMINITEL_INTERFACE=$1
+    IMINITEL_ADDR=$5
+
+    # Mise en place de la route
+    /sbin/route add -host $DNS1 gw ${IMINITEL_ADDR}
+
+    # Calcul adresse minitel.minitelip
+    X=`host minitel.minitelip $DNS1`
+    set $X
+
+    # Adresse = dernier parametre
+    i=0
+    N=`expr $# - 1`
+    while [ $i -lt $N ]; do
+	shift
+	i=`expr $i + 1`
+    done
+    /sbin/route add -host $1 gw ${IMINITEL_ADDR}
+    cat <<EOF > /tmp/.iminitel
+IMINITEL_SERVER=$1
+IMINITEL_INTERFACE=${IMINITEL_INTERFACE}
+EOF
+fi
+

@@ -1,0 +1,7 @@
+#!/bin/bash
+# $Id: ip-down.iminitel,v 1.1 2001/02/05 09:34:59 pierre Exp $
+# I-Minitel
+if [ "$6" = "iminitel" ]; then
+    rm -f /tmp/.iminitel
+fi
+

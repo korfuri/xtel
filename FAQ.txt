@@ -1,0 +1,198 @@
+                               La FAQ de XTEL
+
+                         Mise à jour le 11/02/2001
+
+Voici quelques questions fréquemment posées concernant la génération, la
+configuration et l'utilisation de Xtel.
+
+Peut-on utiliser Xtel à des fins commerciales ?
+Au lancement de Xtel, j'obtiens un message d'erreur sur le chargement des
+fontes, que dois-je faire ?
+Peut-on utiliser Xtel sans avoir TCP/IP ?
+Comment spécifier un nom de serveur xteld ?
+Au lancement de Xtel, j'obtiens un message "Erreur de connexion au serveur
+XTEL...", que dois-je faire ?
+Le modem ne se connecte pas, que faire ?
+Quels sont les modems supportés par Xtel ?
+Puis-je accèder au TVR (Télétel Vitesse Rapide) avec Xtel ?
+Le modem ne compose pas le numéro, que faire ?
+Existe-t-il une version anglaise (ou autre) de Xtel?
+Existe-t-il une version Windows du client Xtel?
+Existe-t-il des distributions binaires de Xtel?
+Ou puis-je poser des questions concernant Xtel ?
+Xtel est-il compatible I-Minitel ?
+Le programme xtel installé à partir du .rpm plante sur mon système, que
+faire ?
+Comment modifier les raccourcis clavier de Xtel?
+  ------------------------------------------------------------------------
+
+*Peut-on utiliser Xtel à des fins commerciales ?
+
+Xtel est distribué sous GPL ce qui autorise parfaitement une utilisation
+commerciale. La principale restriction est l'obligation de distribuer les
+sources de Xtel en cas de redistribution commerciale.
+
+*Au lancement de Xtel, j'obtiens un message d'erreur sur le chargement des
+fontes, que dois-je faire ?
+
+Lire le LISEZMOI !
+
+Xtel utilise des fontes spéciales (fontes à la norme Vidéotex) qui sont
+normalement installés par la commande make install. Pour que ces fontes
+soient connues par le serveur X, il est nécessaire de l'en informer par la
+commande:
+
+xset +fp le_repertoire_des_fontes_Xtel
+
+Dans le cas de XFree86, le mieux est d'ajouter la ligne :
+
+FontPath    "/usr/X11R6/lib/X11/fonts/xtel/"
+
+dans le fichier XF86Config et de relancer le serveur.
+
+*Peut-on utiliser Xtel sans avoir TCP/IP ?
+
+Non car le flag NO_NETWORK est définitivement supprimé à partir de la
+version 3.3.0.
+
+Ce flag n'avait plus d'intérêt sachant que LINUX et les autres UNIX ont TOUS
+une couche TCP/IP. L'existence d'une couche TCP/IP ne signifie pas forcément
+la connexion à un réseau local ou à l'Internet. L'interface TCP/IP locale
+(lo sur LINUX, adresse 127.0.0.1) suffit largement au bon fonctionnement de
+Xtel.
+
+L'existence de ce flag entrainait de plus des confusions et erreurs de
+configuration...donc des mails agaçants à l'auteur!
+
+*Comment spécifier un nom de serveur xteld ?
+
+Le nom du serveur par défaut est localhost (cas du serveur et du client sur
+la même machine). Il existe diverses manières de changer le nom :
+
+   * au lancement de xtel par l'option -serveur
+   * dans vos ressources X (.Xdefaults par exemple) par une ligne :
+
+     xtel*serveur: le_serveur
+
+*Au lancement de Xtel, j'obtiens un message "Erreur de connexion au serveur
+XTEL...", que dois-je faire ?
+
+Le serveur spécifié n'est pas accessible au niveau TCP/IP, ou bien le démon
+xteld est mal installé (relire le fichier LISEZMOI concernant la
+modification des fchiers /etc/services et /etc/inetd.conf). Attention, dans
+le cas de l'utilisation de TCP/IP entre client et serveur, le démon xteld ne
+doit JAMAIS être lancé à la main (il est lancé automatiquement par le
+super-démon inetd).
+
+Si vous utilisez le service pages jaunes (Yellow Pages/NIS), n'oubliez pas
+de déclarer le service xtel dans la map NIS (équivalent du /etc/services
+local).
+
+*Le modem ne se connecte pas, que faire ?
+
+Voir ci-dessous
+
+*Quels sont les modems supportés par Xtel ?
+
+Tous les modems supportant le mode V.23 utilisé par le MINITEL®. Tous les
+modems agréés par FT sont sensés fonctionner dans ce mode. Attention
+cependant à quelques modems comme les US-Robotics sur lesquels le mode V.23
+est inactif par défaut. Il faut alors envoyer la bonne commande AT dans le
+fichier xtel.lignes pour valider ce mode. Vous pouvez également utiliser les
+accès rapide (modulation normale) sur 0836011515, etc...
+
+Relisez bien le fichier LISEZMOI qui contient une section
+Détection/configuration des modems
+
+Si vous utilisez un modem non prévu dans la liste, merci de NE PAS ME
+DEMANDER la config à utiliser. Je n'en sais pas plus que vous, donc:
+
+   * Lisez la doc constructeur ou renseignez vous auprès de ce dernier afin
+     d'envoyer la bonne séquence (passage en modulation V.23)
+   * Au pire, effectuez des essais avec un émulateur de terminal pour
+     déterminer la bonne séquence et valider la chaîne de configuration
+
+*Puis-je accèder au TVR (Télétel Vitesse Rapide) avec Xtel ?
+
+Oui, à condition d'avoir le bon modem. Le TVR utilise une modulation
+spéciale (proche de celle du fax) qui n'est à ma connaissance supportée que
+par les modems Djinn Flash commercialisés par FT et fabriqués par la société
+bordelaise COM1 (et disponibles également sous cette marque).
+
+[Image] dernières nouvelles: le TVR est utilisé sur les services I-Minitel
+utilisable avec la version 3.3 de Xtel, voir en cliquant ici.
+
+*Le modem ne compose pas le numéro, que faire ?
+
+  1. Ajouter un \d (délai de 1s) au début de la chaine de composition du
+     numéro dans le fichier xtel.ligne, ça permet au modem de se
+     synchroniser sur la vitesse imposée par xteld
+  2. Si ça ne marche toujours pas, tracer le fonctionnement de xteld en
+     décommentant la ligne :
+
+     #define DEBUG_XTELD
+
+     du fichier Config.tmpl. Le nouvel xteld ainsi généré affichera des
+     infos de debug sur /dev/console (par défaut) ou bien en utilisant
+     syslogd.
+
+*Existe-t-il une version anglaise (ou autre) de Xtel?
+
+Pas pour l'instant. Le MINITEL® est principalement utilisé en France. Les
+versions 3.1 et supérieures sont cependant très simple à traduire puisque
+tous les messages sont rassemblés dans le fichier de ressources XTel-msg (ou
+XTelm-msg pour la version Motif). Reste à traduire la doc :(
+
+*Existe-t-il une version Windows du client Xtel?
+
+Xtel n'existe pas en version Windows mais xteld peut être utilisé avec
+(HyperTerminal Private Edition 3.0 à 5.0 de chez Hilgraeve). Pour en savoir
+plus, cliquer ici.
+
+*Existe-t-il des distributions binaires de Xtel?
+
+Oui, exclusivement pour LINUX au format RPM pour l'instant. Cliquez ici. Ca
+viendra pour d'autres architectures si la demande est forte :)
+
+*Ou puis-je poser des questions concernant Xtel ?
+
+Dans les groupes de discussions fr.comp.os.linux, fr.comp.applications.x11
+ou bien fr.comp.os.unix. A défaut, envoyer un Email à l'auteur à l'adresse
+pierre@ai.alienor.fr.
+
+*Xtel est-il compatible I-Minitel?
+
+Oui, voir en cliquant ici
+
+*Le programme xtel installé à partir du .rpm plante sur mon système, que
+faire ?
+
+Regénérer le .rpm binaire à partir du .src.rpm, en utilisant la commande:
+
+  rpm --rebuild xtel-3.3.0-1.src.rpm
+
+pui re-installer le .rpm binaire généré sur /usr/src/redhat/RPMS/i386.
+
+*Comment modifier les raccourcis clavier de Xtel?
+
+Xtel utilise les tables de translations standards. Il suffit donc d'ajouter
+des lignes du type:
+
+xtel*ecran_minitel.translations: #override \n\
+Tab:       emission-commande(H) \n\
+BackSpace: emission-commande(G)
+
+dans vos resources (fichier .Xdefaults ou équivalent).
+
+Nous rappelons la correspondance des touches Minitel:
+ ENVOI        A
+ RETOUR       B
+ REPETITION   C
+ GUIDE        D
+ ANNULATION   E
+ SOMMAIRE     F
+ CORRECTION   G
+ SUITE        H
+ CONNEXION_FINI
+  ------------------------------------------------------------------------
+[Retour]

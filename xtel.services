@@ -1,0 +1,18 @@
+#
+# Fichier xtel.services
+#
+# Les grands classiques
+modem0,Annuaire électronique,3611
+modem0,Télétel 1    (3613),3613
+modem0,Télétel 2    (3614),3614
+modem0,Télétel 3    (3615),3615
+#le_tvr,Télétel TVR  (3623),3623
+# Acces serveur local
+#@pipe,Serveur local,/usr/local/bin/le_serveur
+# Acces TCP
+#@tcp,Intelmatique,minitel.fr:513
+# I-Minitel
+@iminitel,I-Minitel,connect_iminitel:7516
+# Acces direct
+modem0,Direct,0
+

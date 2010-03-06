@@ -1,0 +1,5 @@
+ttyS0 115200 crtscts usepeerdns noipdefault nodefaultroute
+connect '/usr/sbin/chat -v -f /etc/ppp/chat-iminitel'
+noauth
+lock
+idle 120

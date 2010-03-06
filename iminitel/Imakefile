@@ -1,0 +1,19 @@
+XCOMM $Id: Imakefile,v 1.2 2001/02/11 00:15:50 pierre Exp $
+PPPDIR=/etc/ppp
+
+all::
+
+clean::
+
+depend::
+
+install::
+InstallNonExecFile(iminitel, $(PPPDIR)/peers)
+InstallNonExecFile(chat-iminitel, $(PPPDIR))
+InstallNamedProg(connect_iminitel.sh,connect_iminitel,$(LIBDIR)/xtel)
+InstallNamedProg(install_iminitel.sh,install_iminitel,$(BINDIR))
+InstallNamedProg(ip-up.iminitel,ip-up.iminitel, $(PPPDIR))
+InstallNamedProg(ip-down.iminitel,ip-down.iminitel, $(PPPDIR))
+
+install::
+	install_iminitel

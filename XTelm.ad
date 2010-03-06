@@ -1,0 +1,93 @@
+!!!!!
+!!
+!! Fichier de ressources pour XTel (Version Motif)
+!!
+!! Pierre Ficheux		
+!!
+!! $Id: XTelm.ad,v 1.10 1999/09/14 07:36:10 pierre Exp $
+!!
+!!!!!
+
+XTelm*serveur:			localhost
+XTelm*commandeImpression:	pnmflip -r90 %s | pnmtops | lpr -h
+XTelm*commandeImpressionAscii:	a2ps %s | lpr -h
+XTelm*petiteFonte:		False
+XTelm*nomService:		xtel
+! Type d'arret: 0=Pas d'arret, 1=Form Feed, 2=SUITE, 3=SUITE ou Form Feed
+XTelm*typeArret:                0
+
+XTelm*shadowThickness:		1
+XTelm*background:               gray65
+XTelm*foreground:               black
+XTelm*menu_clavier*background:	#986430
+XTelm*paned_base*traversalOn:	False
+XTelm*fontList:			-*-helvetica-medium-r-*-*-14-*-*-*-*-*-iso8859-1
+XTelm*XmTextField.background:   #bcb5ba
+XTelm*XmText.background:        #bcb5ba
+
+! Pour utiliser le popup-menu, decommenter les lignes suivantes.
+!XTelm*ecran_minitel.translations: #override \n\
+!        <Btn2Down>: 	affiche_menu_clavier()
+
+XTelm*timer_minitel.background:		gray65
+XTelm*timer_minitel.borderWidth:	0
+XTelm*timer_minitel.clockForeground:	green
+XTelm*timer_minitel.timerForeground:	red
+XTelm*timer_minitel.font:		xteldigit
+
+XTelm*helpBackground:			yellow
+XTelm*helpFont:				-*-helvetica-medium-r-*-*-12-*-*-*-*-*-iso8859-1
+
+XTelm*boite_haut*shadowThickness:	1
+XTelm*boite_haut*shadowColor1:		#d0d0d0
+XTelm*boite_haut*shadowColor2:		#606060
+
+XTelm*boite_haut*marginHeight:		0
+XTelm*boite_haut*marginWidth:		0
+XTelm*boite_haut*entryBorder:		0
+
+XTelm*boite_bas*shadowThickness:	0
+XTelm*boite_bas*marginHeight:		0
+XTelm*boite_bas*marginWidth:		0
+XTelm*boite_bas*entryBorder:		0
+XTelm*boite_bas*spacing:		5
+
+XTelm*btn_lecteur.sensitive:		False
+XTelm*rc_lecteur*fontList:		-*-helvetica-medium-r-*-*-12-*-*-*-*-*-iso8859-1
+XTelm*clavier_lecteur*shadowThickness:	1
+XTelm*clavier_lecteur*indicatorOn:	False
+
+XTelm*bouton_quitte.background:		red
+XTelm*stop_tele.background:		red
+
+XTelm*menu_proto*blanc_tele.height:	10
+XTelm*menu_clavier*blanc.height:	20
+
+! Boutons Minitel
+XTelm*boite_bas*btn_connexion_fin.foreground:	red
+
+! Fontes Videotex
+XTelm*ecran_minitel.fonteG0no_p:		minig0_8x10
+XTelm*ecran_minitel.fonteG0dh_p:		minig0_8x20
+XTelm*ecran_minitel.fonteG0dl_p:		minig0_16x10
+XTelm*ecran_minitel.fonteG0dt_p:		minig0_16x20
+XTelm*ecran_minitel.fonteG1_p:			minig1_8x10
+XTelm*ecran_minitel.fonteG0nos_p:		minig0s_8x10
+XTelm*ecran_minitel.fonteG0dhs_p:		minig0s_8x20
+XTelm*ecran_minitel.fonteG0dls_p:		minig0s_16x10
+XTelm*ecran_minitel.fonteG0dts_p:		minig0s_16x20
+XTelm*ecran_minitel.fonteG1s_p:			minig1s_8x10
+
+XTelm*ecran_minitel.fonteG0no_g:		minig0_16x20
+XTelm*ecran_minitel.fonteG0dh_g:		minig0_16x40
+XTelm*ecran_minitel.fonteG0dl_g:		minig0_32x20
+XTelm*ecran_minitel.fonteG0dt_g:		minig0_32x40
+XTelm*ecran_minitel.fonteG1_g:			minig1_16x20
+XTelm*ecran_minitel.fonteG0nos_g:		minig0s_16x20
+XTelm*ecran_minitel.fonteG0dhs_g:		minig0s_16x40
+XTelm*ecran_minitel.fonteG0dls_g:		minig0s_32x20
+XTelm*ecran_minitel.fonteG0dts_g:		minig0s_32x40
+XTelm*ecran_minitel.fonteG1s_g:			minig1s_16x20
+
+! Messages
+#include "XTelm-msg"

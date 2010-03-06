@@ -1,0 +1,34 @@
+XCOMM
+XCOMM Imakefile du widget Videotex
+XCOMM
+XCOMM Auteur : Pierre FICHEUX
+XCOMM $Id: Imakefile,v 1.6 1998/10/02 14:48:59 pierre Exp $
+XCOMM
+
+#include "../Config.tmpl"
+
+#ifndef NO_TVR
+TVRSRCS= tvr_jpg.c tvr_hdr.c
+TVROBJS= tvr_jpg.o tvr_hdr.o
+
+    JPEGLIB= -ljpeg
+DEPENDFLAGS= -I/usr/local/include
+
+#endif
+
+SRCS= Videotex.c $(TVRSRCS) xvdt.c
+OBJS= Videotex.o $(TVROBJS)
+
+HDRS= Videotex.h VideotexP.h $(TVRSRCS)
+
+NormalLibraryTarget(Videotex,$(OBJS))
+NormalProgramTarget(xvdt, Videotex.o $(TVROBJS) xvdt.o ../inet.o, , $(JPEGLIB) XawClientLibs, )
+NormalLintTarget($(SRCS))
+
+depend:: Videotex.h VideotexP.h $(WHDRS)
+DependTarget()
+
+
+
+
+

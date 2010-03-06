@@ -1,0 +1,43 @@
+# Liste des modems définis
+# $Id: modem.list,v 1.3 1999/09/17 07:40:43 pierre Exp $
+# Format: 
+#
+# [Constructeur]
+# Keyword:Nom-du-modem:separateur:vitesse:init
+#
+# Les espaces ne sont *pas* autorisés sauf dans le mot-cle
+#
+
+# Liste des modems définis
+# $Id: modem.list,v 1.3 1999/09/17 07:40:43 pierre Exp $
+# Format: 
+#
+# [Constructeur]
+# Keyword:Nom-du-modem:separateur:vitesse:init
+#
+# Les espaces ne sont *pas* autorisés sauf dans le mot-cle
+#
+
+[COMOne]
+MC218 V34:PC-Card-MC218:,:38400:\dat&fm1e0&k3f3\r-OK
+RCV56DPF-PLL:PC-Card-MC220:,:38400:\dat&fm1e0&k3f3\r-OK
+RCV56DPF:Deskline-56K:,:38400:\dat&fm1e0&k3f3\r-OK
+DJINN:Djinn-Flash:,:1200:\dat&fme0&k3f3\r-OK
+RCV288:MV234:,:38400:\dat&fm1e0&k3f3\r-OK
+
+[Olitec]
+OLITEC:14400/28800/33600:,:38400:\datm1&k3\r-OK-atb2\r-OK
+RCV56DPF:56K:,:38400:\dat&fm1e0&k3f3\r-OK
+
+[USR]
+Sportster:Sportster:|:1200:\datm1e0&k3\r-OK-ATs27=16s34=8s40=6S9=100&b2&n2\r-OK
+Courier:Courier:,:1200:\datm1e0&k3\r-OK-ATs27=16s34=8s40=6S9=100&b2&n2\r-OK
+U.S. Robotics 56K:56K:,:38400:\datm1e0&h1&s1&r2\r-OK-ATs27=16s34=8S9=100&b1\r-OK
+
+[Kortex]
+KORTEX 336:Novafax-336:|:38400:\dATZ\r-OK-ATM2\r-OK-AT+MS=3\x2C0\x2C1200\x2C1200\r-OK
+
+[Hayes]
+ACCURA:ACCURA-288/336:,:38400:\datm1&k3\r-OK-atb2\r-OK
+RCV56:Accura-56K:,:38400:\dat&fm1e0&k3f3\r-OK
+SMO14400:OPTIMA-144:,:38400:\datm1&k3\r-OK-atb2\r-OK
