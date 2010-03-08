@@ -9,8 +9,8 @@ Homepage: http://pficheux.free.fr/xtel/
 Package: xtel
 Architecture: any
 Pre-Depends: x11-common (>= 1:7.0.0)
-Depends: openbsd-inetd | inet-superserver, ppp, ${shlibs:Depends}, ${misc:Depends}
-Recommends: logrotate
+Depends: openbsd-inetd | inet-superserver, ${shlibs:Depends}, ${misc:Depends}
+Recommends: logrotate, ppp, xterm
 Description: X emulator of the French Minitel
  This is a lesstif Minitel client that runs on color/black and white
  X Display and a xteld daemon that can make Minitel connection with
