@@ -10,6 +10,7 @@ xtel (3.3.0-7) unstable; urgency=low
     - Fix spelling.
     - Move ppp from Depends to Recommends.
     - Add xterm to Recommends for teleinfo support
+  * debian/rules: Remove install-stamp on clean.
   * xteld.man: Replace quotes with double quotes.
   * debian/prerm: Remove call to install-docs.
   * Enable teleinfo support and fix it for UTF-8 support (Closes: #572730).
