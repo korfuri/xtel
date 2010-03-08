@@ -10,6 +10,7 @@ xtel (3.3.0-7) unstable; urgency=low
     - Fix spelling.
   * xteld.man: Replace quotes with double quotes.
   * debian/prerm: Remove call to install-docs.
+  * Enable teleinfo support and fix it for UTF-8 support (Closes: #572730).
 
  -- Samuel Thibault <sthibault@debian.org>  Sat, 06 Mar 2010 16:03:18 +0100
 

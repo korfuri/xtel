@@ -42,6 +42,8 @@ static char rcsid[] = "$Id: xtel.c,v 1.20 2001/02/11 00:05:13 pierre Exp $";
 #include "pixmaps/xtel.xpm"
 #endif /* NO_XPM */
 
+#include <locale.h>
+
 static Colormap current_cmap;
 static Cursor teleph_cursor;
 static Pixmap pixmap_icone = None;
@@ -446,6 +448,8 @@ char **av;
     int i;
     Widget topLevel;
 
+    setlocale(LC_ALL, "");
+
     if (prototype_xtel == 0) {
 	if (PATCHLEVEL != 0)
 	    printf ("XTEL %d.%d.%d, Emulateur MINITEL/I-MINITEL\n", version_xtel, revision_xtel, PATCHLEVEL);
@@ -639,9 +643,9 @@ char **av;
 
     XtRealizeWidget(topLevel);
 
-    /*
     XtAddCallback (ecran_minitel, XtNmodeCallback, (XtCallbackProc)selection_mode_emulation, (XtPointer)"A");
     XtAddCallback (ecran_minitel, XtNmodefrCallback, (XtCallbackProc)selection_mode_emulation, (XtPointer)"F");
+    /*
     XtAddCallback (ecran_minitel, XtNenregCallback, (XtCallbackProc)enregistre_caractere, (XtPointer)NULL);
     */
     init_xtel ();

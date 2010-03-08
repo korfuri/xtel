@@ -100,9 +100,13 @@ XtInputId *id;
 	      kill (pid_teleinfo, SIGKILL);
 	      close (fd_teleinfo);
 	    } else {
+	      char s[8];
+	      int n;
 	      if (mode_emulation == MODE_TELEINFO_FR)
 		c = conversion_teleinfo_fr (c,3);
-	      write (fd_teleinfo, &c, 1);
+	      n = snprintf (s, sizeof (s), "%lc", (unsigned char) c);
+	      if (n != -1)
+		write (fd_teleinfo, s, n);
 	    }
 	}
 	else {

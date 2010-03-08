@@ -279,7 +279,8 @@ int  m ;
 	  break;
 
       case 0x0e :
-          c = 0xef ;
+          //c = 0xef ;
+          c = 0;
 	break ;
 	  
       case 0x1b :
@@ -310,11 +311,17 @@ XtInputId *id;
     if (read (*fid, &c, 1) == 1)  {
         if (mode_emulation == MODE_TELEINFO_FR)
 	     c = conversion_teleinfo_fr (c,2);
-      
+
 	if (flag_connexion)
 	    write (socket_xteld, &c, 1);
-	else
-	    write (fd_teleinfo, &c, 1);
+	else {
+	    char s[8];
+	    int n;
+
+	    n = sprintf(s, sizeof(s), "%lc", (unsigned char) c);
+	    if (n != -1)
+	      write (fd_teleinfo, s, n);
+	}
     }
 }
 
