@@ -1,11 +1,11 @@
 xtel (3.3.0-7) unstable; urgency=low
 
   * debian/control:
-    - New maintainer.
+    - New maintainer (Closes: #474129).
     - Bump Standards-Version to 3.8.4 (no changes needed).
     - Replace xbase-clients build-dep with xfonts-utils (for bdftopcf and
       mkfontdir).
-    - Replace xutils with xutils-dev (for xmkmf).
+    - Replace xutils with xutils-dev (for xmkmf) (Closes: #527508).
     - Drop xbase-clients and xfonts-utils Depends.
     - Fix spelling.
   * xteld.man: Replace quotes with double quotes.
