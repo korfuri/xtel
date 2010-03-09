@@ -82,6 +82,10 @@ static char rcsid[] = "$Id: xteld.c,v 1.33 2001/02/13 09:40:49 pierre Exp $";
 #include <netinet/in.h>
 #include <netdb.h>
 
+#ifndef MAXPATHLEN
+#define MAXPATHLEN 1024
+#endif /* ndef MAXPATHLEN */
+
 #define XTELD_INPUT	0
 #define XTELD_OUTPUT	1
 
