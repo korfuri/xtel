@@ -28,7 +28,7 @@ NETWORKCFLAGS = -DNO_NETWORK
 #ifdef NO_TERMIO
 TERMIOCFLAGS = -DNO_TERMIO
 #else
-#if defined(USE_TERMIOS) || defined(__FreeBSD__) || defined(__GNU__)
+#if defined(USE_TERMIOS) || defined(__FreeBSD__) || defined(__FreeBSD_kernel__) || defined(__GNU__)
 TERMIOCFLAGS = -DUSE_TERMIOS
 #endif
 #endif
