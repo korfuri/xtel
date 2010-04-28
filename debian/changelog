@@ -1,4 +1,4 @@
-xtel (3.3.0-8) unreleased; urgency=low
+xtel (3.3.0-8) unstable; urgency=low
 
   * Define MAXPATHLEN to fix hurd-i386 build.
   * Define USE_TERMIOS on kfreebsd-* too.
