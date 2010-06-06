@@ -1,3 +1,10 @@
+xtel (3.3.0-9) unreleased; urgency=low
+
+  * debian/postinst: Drop loading debconf/confmodule, as it makes
+    configuration hang and is actually unused.
+
+ -- Samuel Thibault <sthibault@debian.org>  Sun, 06 Jun 2010 02:33:11 +0200
+
 xtel (3.3.0-8) unstable; urgency=low
 
   * Define MAXPATHLEN to fix hurd-i386 build.
