@@ -2,6 +2,7 @@ xtel (3.3.0-9) unreleased; urgency=low
 
   * debian/postinst: Drop loading debconf/confmodule, as it makes
     configuration hang and is actually unused.
+  * debian/control: Bump Standards-Version to 3.9.0 (no changes needed).
 
  -- Samuel Thibault <sthibault@debian.org>  Sun, 06 Jun 2010 02:33:11 +0200
 
