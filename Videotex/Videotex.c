@@ -942,9 +942,34 @@ Cardinal        nb_params;
 	} else {
 	    videotexDecode(w, buf[0]);
 	}
-    }
-    
+    } else {
+	const char *emit = NULL;
 
+	switch (ks) {
+	    case XK_Up:
+		emit = "\e[A";
+		break;
+	    case XK_Down:
+		emit = "\e[B";
+		break;
+	    case XK_Right:
+		emit = "\e[C";
+		break;
+	    case XK_Left:
+		emit = "\e[D";
+		break;
+	}
+
+	if (emit) {
+	    if (pv->connecte && pv->fd_connexion > 0) {
+		write(pv->fd_connexion, emit, strlen(emit));
+	    } else {
+		const char *c;
+		for (c = emit; *c; c++)
+		    videotexDecode(w, *c);
+	    }
+	}
+    }
 }
 
 /*
