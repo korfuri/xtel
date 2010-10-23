@@ -929,36 +929,29 @@ Cardinal        nb_params;
     KeySym          ks;
     VideotexWidget  vw = (VideotexWidget) w;
     register VideotexPart *pv = &vw->videotex;
+    int ret;
+    const char *emit = NULL;
 
-    if ((XLookupString(pevent, &buf[0], 1, &ks, 0) != 0) && ((pevent->state & Mod1Mask) == 0) && pv->mode_videotex) {
-	if ((pevent->state & (ShiftMask | LockMask)) == 0)
-	    buf[0] = toupper(buf[0]);
-	else
-	    buf[0] = tolower(buf[0]);
-	buf[1] = 0;
+    ret = XLookupString(pevent, &buf[0], 1, &ks, 0);
 
-	if (pv->connecte && pv->fd_connexion > 0) {
-	    write(pv->fd_connexion, buf, 1);
-	} else {
-	    videotexDecode(w, buf[0]);
-	}
-    } else {
-	const char *emit = NULL;
-
+    if (pv->mode_videotex) {
 	switch (ks) {
-	    case XK_Up:
-		emit = "\x0B"; /* ^K */
-		break;
-	    case XK_Down:
-		emit = "\x0A"; /* ^J */
+	    case XK_Left:
+		emit = "\x08"; /* ^H */
 		break;
 	    case XK_Right:
 		emit = "\x09"; /* ^I */
 		break;
-	    case XK_Left:
-		emit = "\x08"; /* ^H */
+	    case XK_Down:
+		emit = "\x0A"; /* ^J */
 		break;
-		/* TODO: Envoi A */
+	    case XK_Up:
+		emit = "\x0B"; /* ^K */
+		break;
+	    case XK_Return:
+	    case XK_KP_Enter:
+		emit = "\023A"; /* Envoi */
+		break;
 	    case XK_Page_Up:
 		emit = "\023B"; /* Retour */
 		break;
@@ -972,20 +965,50 @@ Cardinal        nb_params;
 	    case XK_Home:
 		emit = "\023F"; /* Sommaire */
 		break;
-		/* TODO: Correction G */
+	    case XK_Delete:
+	    case XK_BackSpace:
+		emit = "\023G"; /* Correction */
+		break;
 	    case XK_Page_Down:
 		emit = "\023H"; /* Suite */
 		break;
 	}
+    } else {
+	switch (ks) {
+	    case XK_Up:
+		emit = "\e[A";
+		break;
+	    case XK_Down:
+		emit = "\e[B";
+		break;
+	    case XK_Right:
+		emit = "\e[C";
+		break;
+	    case XK_Left:
+		emit = "\e[D";
+		break;
+	}
+    }
 
-	if (emit) {
-	    if (pv->connecte && pv->fd_connexion > 0) {
-		write(pv->fd_connexion, emit, strlen(emit));
-	    } else {
-		const char *c;
-		for (c = emit; *c; c++)
-		    videotexDecode(w, *c);
-	    }
+    if (emit) {
+	if (pv->connecte && pv->fd_connexion > 0) {
+	    write(pv->fd_connexion, emit, strlen(emit));
+	} else {
+	    const char *c;
+	    for (c = emit; *c; c++)
+		videotexDecode(w, *c);
+	}
+    } else if ((ret != 0) && ((pevent->state & Mod1Mask) == 0) && pv->mode_videotex) {
+	if ((pevent->state & (ShiftMask | LockMask)) == 0)
+	    buf[0] = toupper(buf[0]);
+	else
+	    buf[0] = tolower(buf[0]);
+	buf[1] = 0;
+
+	if (pv->connecte && pv->fd_connexion > 0) {
+	    write(pv->fd_connexion, buf, 1);
+	} else {
+	    videotexDecode(w, buf[0]);
 	}
     }
 }
