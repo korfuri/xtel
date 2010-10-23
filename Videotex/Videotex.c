@@ -947,16 +947,34 @@ Cardinal        nb_params;
 
 	switch (ks) {
 	    case XK_Up:
-		emit = "\e[A";
+		emit = "\x0B"; /* ^K */
 		break;
 	    case XK_Down:
-		emit = "\e[B";
+		emit = "\x0A"; /* ^J */
 		break;
 	    case XK_Right:
-		emit = "\e[C";
+		emit = "\x09"; /* ^I */
 		break;
 	    case XK_Left:
-		emit = "\e[D";
+		emit = "\x08"; /* ^H */
+		break;
+		/* TODO: Envoi A */
+	    case XK_Page_Up:
+		emit = "\023B"; /* Retour */
+		break;
+	    case XK_F2:
+		emit = "\023C"; /* Répétition */
+		break;
+	    case XK_F1:
+		emit = "\023D"; /* Guide */
+		break;
+		/* TODO: Annulation E ? */
+	    case XK_Home:
+		emit = "\023F"; /* Sommaire */
+		break;
+		/* TODO: Correction G */
+	    case XK_Page_Down:
+		emit = "\023H"; /* Suite */
 		break;
 	}
 
