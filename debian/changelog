@@ -1,6 +1,7 @@
 xtel (3.3.0-10) UNRELEASED; urgency=low
 
   * debian/control: Add netpbm to Depends: to fix print.
+  * Videotex/Videotex.c: Add arrow keys binding.
 
  -- Samuel Thibault <sthibault@debian.org>  Sun, 17 Oct 2010 01:05:08 +0200
 

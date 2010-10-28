@@ -948,30 +948,6 @@ Cardinal        nb_params;
 	    case XK_Up:
 		emit = "\x0B"; /* ^K */
 		break;
-	    case XK_Return:
-	    case XK_KP_Enter:
-		emit = "\023A"; /* Envoi */
-		break;
-	    case XK_Page_Up:
-		emit = "\023B"; /* Retour */
-		break;
-	    case XK_F2:
-		emit = "\023C"; /* Répétition */
-		break;
-	    case XK_F1:
-		emit = "\023D"; /* Guide */
-		break;
-		/* TODO: Annulation E ? */
-	    case XK_Home:
-		emit = "\023F"; /* Sommaire */
-		break;
-	    case XK_Delete:
-	    case XK_BackSpace:
-		emit = "\023G"; /* Correction */
-		break;
-	    case XK_Page_Down:
-		emit = "\023H"; /* Suite */
-		break;
 	}
     } else {
 	switch (ks) {
