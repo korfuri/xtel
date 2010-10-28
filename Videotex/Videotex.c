@@ -914,6 +914,36 @@ int c;
 }
 
 /*
+ * Convertit un keysym X en une chaîne à envoyer.
+ */
+static const char *
+fleche_emettre(VideotexPart *pv, KeySym ks) {
+    if (pv->mode_videotex) {
+	switch (ks) {
+	    case XK_Left:
+		return "\x08"; /* ^H */
+	    case XK_Right:
+		return "\x09"; /* ^I */
+	    case XK_Down:
+		return "\x0A"; /* ^J */
+	    case XK_Up:
+		return "\x0B"; /* ^K */
+	}
+    } else {
+	switch (ks) {
+	    case XK_Up:
+		return "\e[A";
+	    case XK_Down:
+		return "\e[B";
+	    case XK_Right:
+		return "\e[C";
+	    case XK_Left:
+		return "\e[D";
+	}
+    }
+}
+
+/*
  * Action touche clavier ==> emission vers le fd de connexion ou bien
  * affichage On simule le comportement du Minitel (defaut => Majuscule, shift
  * => minuscule)
@@ -930,48 +960,18 @@ Cardinal        nb_params;
     VideotexWidget  vw = (VideotexWidget) w;
     register VideotexPart *pv = &vw->videotex;
     int ret;
-    const char *emit = NULL;
+    const char *emettre = NULL;
 
     ret = XLookupString(pevent, &buf[0], 1, &ks, 0);
 
-    if (pv->mode_videotex) {
-	switch (ks) {
-	    case XK_Left:
-		emit = "\x08"; /* ^H */
-		break;
-	    case XK_Right:
-		emit = "\x09"; /* ^I */
-		break;
-	    case XK_Down:
-		emit = "\x0A"; /* ^J */
-		break;
-	    case XK_Up:
-		emit = "\x0B"; /* ^K */
-		break;
-	}
-    } else {
-	switch (ks) {
-	    case XK_Up:
-		emit = "\e[A";
-		break;
-	    case XK_Down:
-		emit = "\e[B";
-		break;
-	    case XK_Right:
-		emit = "\e[C";
-		break;
-	    case XK_Left:
-		emit = "\e[D";
-		break;
-	}
-    }
+    emettre = fleche_emettre(pv, ks);
 
-    if (emit) {
+    if (emettre) {
 	if (pv->connecte && pv->fd_connexion > 0) {
-	    write(pv->fd_connexion, emit, strlen(emit));
+	    write(pv->fd_connexion, emettre, strlen(emettre));
 	} else {
 	    const char *c;
-	    for (c = emit; *c; c++)
+	    for (c = emettre; *c; c++)
 		videotexDecode(w, *c);
 	}
     } else if ((ret != 0) && ((pevent->state & Mod1Mask) == 0) && pv->mode_videotex) {
@@ -987,6 +987,8 @@ Cardinal        nb_params;
 	    videotexDecode(w, buf[0]);
 	}
     }
+    
+
 }
 
 /*
@@ -1073,7 +1075,28 @@ Cardinal        nb_params;
 		chaine[i] = toupper(chaine[i]);
 
 	    write(pv->fd_connexion, chaine, strlen(chaine));
+
+	} else if (pv->attributs[rang][i].jeu == G2
+			&& pv->attributs[rang][i].code[0] >= 0x2C
+			&& pv->attributs[rang][i].code[0] <= 0x2F) {
+		const char *emettre;
+		switch (pv->attributs[rang][i].code[0]) {
+			case 0x2C:
+				emettre = fleche_emettre(pv, XK_Left);
+				break;
+			case 0x2D:
+				emettre = fleche_emettre(pv, XK_Up);
+				break;
+			case 0x2E:
+				emettre = fleche_emettre(pv, XK_Right);
+				break;
+			case 0x2F:
+				emettre = fleche_emettre(pv, XK_Down);
+				break;
+		}
+		write(pv->fd_connexion, emettre, strlen(emettre));
 	}
+
     }
 }
 
