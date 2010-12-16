@@ -164,6 +164,7 @@ lecture_services ()
 	if (sep[0] == 0) {
 	  if (get_separator (buf, sep) < 0) {
 	    log_err ("lecture_services: erreur lecture separateur");
+	    fclose(fp);
 	    return -1;
 	  }
 	}
@@ -229,6 +230,7 @@ lecture_configuration_lignes ()
 	if (sep[0] == 0) {
 	  if (get_separator (buf, sep) < 0) {
 	    log_err ("lecture_configuration_lignes: erreur lecture separateur");
+	    fclose(fp);
 	    return -1;
 	  }
 	}

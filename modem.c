@@ -300,7 +300,7 @@ char *telno, *reply_buf;
 int reply_size;
 {
     fd_set a_lire, t_a_lire;
-    int i, erreur, fin, nbread, cmodem;
+    int i, erreur, fin, nbread, cmodem = 0;
     char *pt_chat, c, *q;
 
     erreur = 0;

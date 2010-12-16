@@ -64,6 +64,7 @@ struct protocole *proto;
 	    i++; proto++;
 	}
     }
+    fclose(fp);
     
     return i;
 }
