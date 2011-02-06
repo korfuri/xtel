@@ -1,4 +1,4 @@
-xtel (3.3.0-10) UNRELEASED; urgency=low
+xtel (3.3.0-10) unstable; urgency=low
 
   * debian/control: Add netpbm to Depends: to fix print.
   * Videotex/Videotex.c: Add arrow keys binding.
