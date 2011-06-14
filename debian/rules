@@ -50,6 +50,7 @@ install: build
 	install -m 644 debian/logrotate.conf debian/xtel/etc/logrotate.d/xtel
 	# Remove non-standard font directory
 	rm -rf debian/xtel/usr/share/fonts/X11/xtel
+	rm -rf debian/xtel/fonts
 	# Install french documentation in the french docs directory
 	install -m 644 debian/index-fr.html debian/xtel/usr/share/doc/LANG/fr/xtel/index.html
 	perl -MMIME::Base64  -ne 'print decode_base64($$_)' < debian/bullet.gif.base64 > debian/xtel/usr/share/doc/LANG/fr/xtel/bullet.gif

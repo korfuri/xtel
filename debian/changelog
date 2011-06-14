@@ -1,6 +1,7 @@
-xtel (3.3.0-11) UNRELEASED; urgency=low
+xtel (3.3.0-11) unstable; urgency=low
 
   * Bump Standards-Version to 3.9.2 (no change needed)
+  * Remove spurious fonts installation in non-standard place.
 
  -- Samuel Thibault <sthibault@debian.org>  Sun, 10 Apr 2011 21:10:19 +0200
 
