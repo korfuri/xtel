@@ -3,7 +3,7 @@ Section: comm
 Priority: extra
 Maintainer: Samuel Thibault <sthibault@debian.org>
 Standards-Version: 3.9.2
-Build-Depends: lesstif2-dev,libx11-dev,libxmu-dev,libxpm-dev,libxt-dev,x11proto-core-dev,xbitmaps,libxaw7-dev,debhelper (>= 5.0.31),gif2png,xfonts-utils,xutils-dev,libjpeg-dev, doc-base, xfonts-utils
+Build-Depends: lesstif2-dev,libx11-dev,libxmu-dev,libxpm-dev,libxt-dev,x11proto-core-dev,xbitmaps,libxaw7-dev,debhelper (>= 5.0.31),gif2png,xfonts-utils,xutils-dev,libjpeg-dev, doc-base, xfonts-utils, hardening-wrapper
 Homepage: http://pficheux.free.fr/xtel/
 
 Package: xtel

@@ -3,6 +3,8 @@ xtel (3.3.0-12) UNRELEASED; urgency=low
   * protocoles.c: Fix crash on bogus fclose().
   * modem.c: Fix format security issue.
   * Imakefile: Set debugging flags to -g -O2.
+  * debian/control: Depend on hardening-check.
+  * debian/rules: Set DEB_BUILD_HARDENING=1 to enable hardening.
 
  -- Samuel Thibault <sthibault@debian.org>  Mon, 07 Nov 2011 00:40:40 +0100
 
