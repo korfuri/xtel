@@ -1,3 +1,9 @@
+xtel (3.3.0-12) UNRELEASED; urgency=low
+
+  * protocoles.c: Fix crash on bogus fclose().
+
+ -- Samuel Thibault <sthibault@debian.org>  Mon, 07 Nov 2011 00:40:40 +0100
+
 xtel (3.3.0-11) unstable; urgency=low
 
   * Bump Standards-Version to 3.9.2 (no change needed)

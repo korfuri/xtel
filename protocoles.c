@@ -63,8 +63,8 @@ struct protocole *proto;
 #endif
 	    i++; proto++;
 	}
+	fclose(fp);
     }
-    fclose(fp);
     
     return i;
 }
