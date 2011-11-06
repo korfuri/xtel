@@ -96,13 +96,13 @@ int  p1, p2, p3, p4, p5, p6, p7, p8;
     char msg[256];
 
     sprintf (msg, fmt, p1, p2, p3, p4, p5, p6, p7, p8);
-    syslog (LOG_INFO, msg);
+    syslog (LOG_INFO, "%s", msg);
 }
 
 void log_err (s)
 char *s;
 {
-    syslog (LOG_ERR, s);
+    syslog (LOG_ERR, "%s", s);
 }
 #else
 void log_debug (fmt, p1, p2, p3, p4, p5, p6, p7, p8)
