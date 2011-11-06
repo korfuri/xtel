@@ -167,7 +167,7 @@ clean::									@@\
 	$(RM) program
 #endif /* ComplexPurifyTarget */
 #else
-CDEBUGFLAGS= -O $(XTELCFLAGS) $(SVR4CFLAGS)
+CDEBUGFLAGS= -g -O2 $(XTELCFLAGS) $(SVR4CFLAGS)
 #endif /* PURE */
 
 INCLUDES= -IWidgets -IVideotex
