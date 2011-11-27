@@ -1,4 +1,4 @@
-xtel (3.3.0-12) UNRELEASED; urgency=low
+xtel (3.3.0-12) unstable; urgency=low
 
   * protocoles.c: Fix crash on bogus fclose().
   * modem.c: Fix format security issue.
