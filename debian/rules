@@ -7,7 +7,9 @@ export DH_VERBOSE=0
 
 export DEB_BUILD_HARDENING=1
 
-build: build-stamp
+build: build-arch
+build-indep:
+build-arch: build-stamp
 build-stamp:
 	dh_testdir
 
@@ -109,4 +111,4 @@ binary-arch: build install
 	dh_builddeb
 
 binary: binary-indep binary-arch
-.PHONY: build clean binary-indep binary-arch binary install
+.PHONY: build build-arch build-indep clean binary-indep binary-arch binary install
