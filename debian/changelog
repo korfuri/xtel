@@ -1,8 +1,9 @@
 xtel (3.3.0-13) UNRELEASED; urgency=low
 
   * debian/rules: Add build-{arch,indep} rules.
+  * control: Bump Standards-Version to 3.9.3 (no changes).
 
- -- Samuel Thibault <sthibault@debian.org>  Sat, 28 Jan 2012 22:33:01 +0100
+ -- Samuel Thibault <sthibault@debian.org>  Sat, 25 Feb 2012 18:03:40 +0100
 
 xtel (3.3.0-12) unstable; urgency=low
 
