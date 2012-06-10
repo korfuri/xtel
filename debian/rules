@@ -20,7 +20,7 @@ build-stamp:
 	xmkmf
 	make Xtel
 	# convert the mean gif file into a png file
-	gif2png xtel.gif
+	convert xtel.gif xtel.png
 	touch build-stamp
 
 clean:
