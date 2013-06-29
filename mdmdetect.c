@@ -278,17 +278,20 @@ char **av;
 
   /* Lecture de la ligne de commande */
   while (--ac) {
-    if ((cp = *++av) == NULL)
-      break;
+    cp = *++av;
     if (*cp == '-' && *++cp) {
       switch(*cp) {
       case 'b' :
+	if (!--ac)
+	  Usage(progname);
 	builder = *++av; break;
 
       case 'd' :
 	++debug; break;
 
       case 'l' :
+	if (!--ac)
+	  Usage(progname);
 	modem_list = *++av; break;
 
       case 'q' :
