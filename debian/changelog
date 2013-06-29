@@ -1,8 +1,8 @@
-xtel (3.3.0-16) UNRELEASED; urgency=low
+xtel (3.3.0-16) unstable; urgency=low
 
   * Fix mdmdetect crash due to incorrect argument parsing.
 
- -- Samuel Thibault <sthibault@debian.org>  Sat, 29 Jun 2013 21:37:28 +0200
+ -- Samuel Thibault <sthibault@debian.org>  Sat, 29 Jun 2013 21:48:25 +0200
 
 xtel (3.3.0-15) unstable; urgency=low
 
