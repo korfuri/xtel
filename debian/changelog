@@ -1,6 +1,6 @@
 xtel (3.3.0-17) unstable; urgency=low
 
-  * Build-depend on libmotif-dev instead of lesstif2-dev.
+  * Build-depend on libmotif-dev instead of lesstif2-dev (Closes: #714677).
 
  -- Samuel Thibault <sthibault@debian.org>  Mon, 01 Jul 2013 23:29:56 +0200
 
