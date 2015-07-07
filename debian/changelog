@@ -1,8 +1,19 @@
-xtel (3.3.0-18) UNRELEASED; urgency=low
+xtel (3.3.0-18) unstable; urgency=medium
 
   * Bump Standards-Version to 3.9.6 (no changes).
 
- -- Samuel Thibault <sthibault@debian.org>  Sat, 13 Jul 2013 19:08:29 +0200
+  [ Dhole ]
+  * Don't store timestamps when calling gzip and remove timestamps from png
+    to make package build reproducibly (Closes: #789965).
+
+ -- Samuel Thibault <sthibault@debian.org>  Tue, 07 Jul 2015 23:59:08 +0200
+
+xtel (3.3.0-17.1) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Eliminate libxp-dev build dependency (Closes: #733290).
+
+ -- Michael Gilbert <mgilbert@debian.org>  Fri, 19 Sep 2014 04:20:50 +0000
 
 xtel (3.3.0-17) unstable; urgency=low
 

@@ -13,6 +13,8 @@ XCOMM Modified for Debian GNU/Linux by Guillaume Morin and Eric Delaunay
 #include "Config.tmpl"
 #include "Motif.tmpl"
 
+#define XmClientLibs -lXm
+
 BITMAPSDIR= bitmaps
 PIXMAPSDIR= pixmaps
 XTELDIR=$(LIBDIR)/xtel

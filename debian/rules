@@ -20,7 +20,7 @@ build-stamp:
 	xmkmf
 	make Xtel
 	# convert the mean gif file into a png file
-	convert xtel.gif xtel.png
+	convert xtel.gif +set date:create +set date:modify -define png:exclude-chunk=time xtel.png
 	touch build-stamp
 
 clean:
@@ -62,7 +62,7 @@ install: build
 	install -m 644 LISEZMOI.txt debian/xtel/usr/share/doc/LANG/fr/xtel/
 	install -m 644 FAQ.txt debian/xtel/usr/share/doc/LANG/fr/xtel/
 	install -m 644 README_IMINITEL.txt debian/xtel/usr/share/doc/LANG/fr/xtel/
-	gzip -9v debian/xtel/usr/share/doc/LANG/fr/xtel/*.txt
+	gzip -9vn debian/xtel/usr/share/doc/LANG/fr/xtel/*.txt
 	# Install png image example
 	install -m 644 xtel.png debian/xtel/usr/share/doc/xtel/
 	# Create a symlink in /usr/share/doc/xtel to the french doc directory
