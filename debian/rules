@@ -94,14 +94,11 @@ binary-arch: build install
 	dh_installinfo
 	install -d -m 755 debian/xtel/usr/share/doc-base
 	install -m 644 debian/doc-base debian/xtel/usr/share/doc-base/xtel
-#	dh_undocumented
 	dh_installchangelogs 
 	dh_link
 	dh_strip
 	dh_compress
 	dh_fixperms
-# You may want to make some executables suid here.
-#	dh_suidregister
 #	dh_makeshlibs
 	dh_installdeb
 #	dh_perl
