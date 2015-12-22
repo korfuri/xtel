@@ -1,50 +1,22 @@
 #!/usr/bin/make -f
-# Sample debian/rules that uses debhelper.
-# GNU copyright 1997 to 1999 by Joey Hess.
 
-# Uncomment this to turn on verbose mode.
-export DH_VERBOSE=0
+%:
+	dh $@
 
-export DEB_BUILD_HARDENING=1
-
-build: build-arch
-build-indep:
-build-arch: build-stamp
-build-stamp:
-	dh_testdir
-
-	# Add here commands to compile the package.
-	# $(MAKE)
-
+override_dh_auto_build:
 	# Imake commands
 	xmkmf
 	make Xtel
 	# convert the mean gif file into a png file
 	convert xtel.gif +set date:create +set date:modify -define png:exclude-chunk=time xtel.png
-	touch build-stamp
 
-clean:
-	dh_testdir
-	dh_testroot
-	rm -f build-stamp install-stamp
-	
-	# Add here commands to clean up after the build process.
-	[ ! -f Makefile ] || $(MAKE) clean
+override_dh_auto_clean:
+	dh_auto_clean
 	rm -f xtel.png
 	find . -name Makefile -print | xargs rm -f
-	dh_clean
 
-install: build
-	dh_testdir
-	dh_testroot
-	dh_clean -k
-	dh_installdirs
-
-	# Add here commands to install the package into debian/xtel.
+override_dh_auto_install:
 	$(MAKE) install DESTDIR=`pwd`/debian/xtel
-	# Install the examples
-	#install -m 644 exemples/*.vdt debian/xtel/usr/share/doc/xtel/examples/
-	dh_installexamples exemples/*.vdt
 	# Install font support and fonts
 	install -m 644 fonts/fonts.alias debian/xtel/etc/X11/fonts/misc/xtel.alias
 	install -m 644 fonts/*.pcf.gz debian/xtel/usr/share/fonts/X11/misc/
@@ -68,44 +40,3 @@ install: build
 	# Create a symlink in /usr/share/doc/xtel to the french doc directory
 	ln -s ../LANG/fr/xtel debian/xtel/usr/share/doc/xtel/fr
 	#rm -f debian/xtel/usr/X11R6/lib/X11/app-defaults
-	touch install-stamp
-
-# Build architecture-independent files here.
-binary-indep: build install
-# We have nothing to do by default.
-
-# Build architecture-dependent files here.
-binary-arch: build install
-#	dh_testversion
-	dh_testdir
-	dh_testroot
-	dh_installdebconf	
-	dh_installdocs
-	dh_installexamples
-	dh_installmenu
-	dh_installxfonts
-#	dh_installemacsen
-#	dh_installpam
-#	dh_installinit
-	dh_installcron
-	dh_installman xteld.man
-	# install xtel man page under X11 directory tree
-	dh_installman xtel.man
-	dh_installinfo
-	install -d -m 755 debian/xtel/usr/share/doc-base
-	install -m 644 debian/doc-base debian/xtel/usr/share/doc-base/xtel
-	dh_installchangelogs 
-	dh_link
-	dh_strip
-	dh_compress
-	dh_fixperms
-#	dh_makeshlibs
-	dh_installdeb
-#	dh_perl
-	dh_shlibdeps
-	dh_gencontrol
-	dh_md5sums
-	dh_builddeb
-
-binary: binary-indep binary-arch
-.PHONY: build build-arch build-indep clean binary-indep binary-arch binary install
