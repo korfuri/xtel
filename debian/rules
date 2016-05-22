@@ -24,6 +24,9 @@ override_dh_auto_install:
 	install -m 644 XTel-color debian/xtel/etc/X11/app-defaults/
 	# Install logrotate conf file
 	install -m 644 debian/logrotate.conf debian/xtel/etc/logrotate.d/xtel
+	# Install menu
+	install -d debian/xtel/usr/share/applications
+	install -m 644 debian/xtel.desktop debian/xtel/usr/share/applications
 	# Remove non-standard font directory
 	rm -rf debian/xtel/usr/share/fonts/X11/xtel
 	rm -rf debian/xtel/fonts
