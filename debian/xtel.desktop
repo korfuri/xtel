@@ -1,0 +1,5 @@
+[Desktop Entry]
+Name=Xtel
+Exec=/usr/bin/xtel
+Type=Application
+Categories=Network;

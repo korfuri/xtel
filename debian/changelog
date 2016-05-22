@@ -1,6 +1,7 @@
 xtel (3.3.0-20) UNRELEASED; urgency=medium
 
-  * control: Bump Standards-Version to 3.9.7 (no change).
+  * menu: Convert to xtel.desktop.
+  * control: Bump Standards-Version to 3.9.8.
 
  -- Samuel Thibault <sthibault@debian.org>  Tue, 02 Feb 2016 02:10:44 +0100
 
