@@ -2,4 +2,4 @@
 Name=Xtel
 Exec=/usr/bin/xtel
 Type=Application
-Categories=Network;
+Categories=Network;Dialup;
