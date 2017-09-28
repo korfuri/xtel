@@ -2,7 +2,7 @@ Source: xtel
 Section: comm
 Priority: optional
 Maintainer: Samuel Thibault <sthibault@debian.org>
-Standards-Version: 4.1.0
+Standards-Version: 4.1.1
 Build-Depends: libmotif-dev,libx11-dev,libxmu-dev,libxpm-dev,libxt-dev,x11proto-core-dev,xbitmaps,libxaw7-dev,debhelper (>= 9),imagemagick,xfonts-utils,xutils-dev,libjpeg-dev, doc-base, xfonts-utils
 Homepage: http://pficheux.free.fr/xtel/
 Vcs-Git: https://anonscm.debian.org/git/collab-maint/xtel.git
