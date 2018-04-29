@@ -1,10 +1,10 @@
-xtel (3.3.0-21) UNRELEASED; urgency=medium
+xtel (3.3.0-21) unstable; urgency=medium
 
   * Use canonical anonscm vcs URL.
   * control: Migrate priority to optional.
   * control: Bump Standards-Version to 4.1.4.
 
- -- Samuel Thibault <sthibault@debian.org>  Sat, 21 Jan 2017 00:28:44 +0100
+ -- Samuel Thibault <sthibault@debian.org>  Sun, 29 Apr 2018 12:36:23 +0200
 
 xtel (3.3.0-20) unstable; urgency=medium
 
