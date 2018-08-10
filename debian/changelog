@@ -1,6 +1,6 @@
 xtel (3.3.0-22) UNRELEASED; urgency=medium
 
-  * control: Bump Standards-Version to 4.1.5 (no changes).
+  * control: Bump Standards-Version to 4.2.0 (no changes).
 
  -- Samuel Thibault <sthibault@debian.org>  Sun, 08 Jul 2018 16:28:41 +0200
 
