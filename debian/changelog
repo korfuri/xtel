@@ -5,6 +5,7 @@ xtel (3.3.0-22) UNRELEASED; urgency=medium
 
   [ Ondřej Nový ]
   * d/changelog: Remove trailing whitespaces
+  * d/control: Set Vcs-* to salsa.debian.org
 
  -- Samuel Thibault <sthibault@debian.org>  Sun, 08 Jul 2018 16:28:41 +0200
 
