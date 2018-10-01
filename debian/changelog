@@ -1,6 +1,10 @@
 xtel (3.3.0-22) UNRELEASED; urgency=medium
 
+  [ Samuel Thibault ]
   * control: Bump Standards-Version to 4.2.0 (no changes).
+
+  [ Ondřej Nový ]
+  * d/changelog: Remove trailing whitespaces
 
  -- Samuel Thibault <sthibault@debian.org>  Sun, 08 Jul 2018 16:28:41 +0200
 
@@ -217,7 +221,7 @@ xtel (3.3.0-5.2) unstable; urgency=low
   * Use perl's base64 decoding instead of mime-codecs, which no longer
     seems to exist. debian/rules has the change, and debian/control
     drops build-dependency on mime-codecs. Patch from Andreas Jochens.
-    Closes: #351958. 
+    Closes: #351958.
   * debian/control: Bumbed Standards-Version to 3.6.2. No changes needed.
 
  -- Lars Wirzenius <liw@iki.fi>  Thu,  9 Mar 2006 19:43:55 +0000
@@ -422,7 +426,7 @@ xtel (3.2.1-2) unstable; urgency=low
 
 xtel (3.2.1-1) unstable; urgency=low
 
-  * Sponsor upload for Guillaume Morin <gemorin@attglobal.net> 
+  * Sponsor upload for Guillaume Morin <gemorin@attglobal.net>
   * New upstream version with pristine sources (closes: #46706, #48183)
   * Converted package management to debhelper
   * Added debconf support
@@ -491,7 +495,7 @@ xtel (3.1-2) frozen unstable; urgency=low
 xtel (3.1-1) unstable; urgency=low
 
   * New upstream version
-  * Fixed documentation typo (Bug#4439) 
+  * Fixed documentation typo (Bug#4439)
   * Support multiple architectures (Bug#4037)
   * Added weekly logfile rotation
   * Converted package management files to new Debian-1.2 style
