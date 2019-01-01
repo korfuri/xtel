@@ -1,13 +1,14 @@
-xtel (3.3.0-22) UNRELEASED; urgency=medium
+xtel (3.3.0-22) unstable; urgency=medium
 
   [ Samuel Thibault ]
   * control: Bump Standards-Version to 4.2.0 (no changes).
+  * watch: Fix.
 
   [ Ondřej Nový ]
   * d/changelog: Remove trailing whitespaces
   * d/control: Set Vcs-* to salsa.debian.org
 
- -- Samuel Thibault <sthibault@debian.org>  Sun, 08 Jul 2018 16:28:41 +0200
+ -- Samuel Thibault <sthibault@debian.org>  Tue, 01 Jan 2019 18:07:00 +0100
 
 xtel (3.3.0-21) unstable; urgency=medium
 

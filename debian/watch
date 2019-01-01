@@ -1,2 +1,2 @@
 version=3
-http://pficheux.free.fr/xtel/download/xtel-(.*)\.tar\.gz
+http://pficheux.free.fr/xtel/tele.html http://pficheux.free.fr/xtel/download/xtel-(.*)\.(?:tar\.xz|txz|tar\.bz2|tbz2|tar\.gz|tgz)
