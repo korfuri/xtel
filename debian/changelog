@@ -1,6 +1,7 @@
 xtel (3.3.0-23) UNRELEASED; urgency=medium
 
   * control: Bump Standards-Version to 4.4.0 (no changes).
+  * watch: Generalize pattern.
 
  -- Samuel Thibault <sthibault@debian.org>  Mon, 05 Aug 2019 23:52:07 +0200
 
