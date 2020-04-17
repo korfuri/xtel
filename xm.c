@@ -138,9 +138,6 @@ static void Affiche_menu_clavier ();
 static void Valide_le_bouton_stop();
 static void Affiche_copyright ();
 
-/* A DEPLACER */
-Widget la_cassete;
-
 #if XmREVISION > 1
 #define XTPOINTER	XtPointer
 #else

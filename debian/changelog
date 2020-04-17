@@ -3,6 +3,8 @@ xtel (3.3.0-23) UNRELEASED; urgency=medium
   * control: Bump Standards-Version to 4.4.0 (no changes).
   * watch: Generalize pattern.
   * source/format: Set 1.0 format.
+  * xm.c: Fix build with -fno-common, which will be the default with gcc-10
+    (Closes: Bug#958003).
 
  -- Samuel Thibault <sthibault@debian.org>  Mon, 05 Aug 2019 23:52:07 +0200
 
