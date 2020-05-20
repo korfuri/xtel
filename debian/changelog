@@ -1,4 +1,4 @@
-xtel (3.3.0-23) UNRELEASED; urgency=medium
+xtel (3.3.0-23) unstable; urgency=medium
 
   * control: Bump Standards-Version to 4.4.0 (no changes).
   * watch: Generalize pattern.
@@ -6,7 +6,7 @@ xtel (3.3.0-23) UNRELEASED; urgency=medium
   * xm.c: Fix build with -fno-common, which will be the default with gcc-10
     (Closes: Bug#958003).
 
- -- Samuel Thibault <sthibault@debian.org>  Mon, 05 Aug 2019 23:52:07 +0200
+ -- Samuel Thibault <sthibault@debian.org>  Wed, 20 May 2020 10:45:21 +0200
 
 xtel (3.3.0-22) unstable; urgency=medium
 
