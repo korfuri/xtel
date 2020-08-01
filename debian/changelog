@@ -1,6 +1,7 @@
 xtel (3.3.0-24) UNRELEASED; urgency=medium
 
   * control: Bump Standards-Version to 4.5.0 (no change)
+  * control: Bump debhelper compat to 12
 
  -- Samuel Thibault <sthibault@debian.org>  Fri, 31 Jul 2020 23:27:51 +0200
 
