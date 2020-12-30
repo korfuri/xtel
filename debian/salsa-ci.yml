@@ -3,4 +3,10 @@ include:
   - https://salsa.debian.org/salsa-ci-team/pipeline/raw/master/salsa-ci.yml
   - https://salsa.debian.org/salsa-ci-team/pipeline/raw/master/pipeline-jobs.yml
 
+variables:
+  # Don't bother trying to mess up with xmkmf
+  SALSA_CI_DISABLE_BLHC: 1
+  # This seems broken on CI only?
+  SALSA_CI_DISABLE_REPROTEST: 1
+
 # vim: ts=2 sw=2 et sts=2 ft=yaml
