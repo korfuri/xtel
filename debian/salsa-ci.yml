@@ -9,4 +9,6 @@ variables:
   # This seems broken on CI only?
   SALSA_CI_DISABLE_REPROTEST: 1
 
+  SALSA_CI_REPROTEST_ENABLE_DIFFOSCOPE: 1
+
 # vim: ts=2 sw=2 et sts=2 ft=yaml
