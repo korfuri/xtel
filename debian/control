@@ -12,7 +12,7 @@ Vcs-Browser: https://salsa.debian.org/debian/xtel
 Package: xtel
 Architecture: any
 Multi-Arch: foreign
-Pre-Depends: x11-common (>= 1:7.0.0)
+Pre-Depends: x11-common
 Depends: openbsd-inetd | inet-superserver, ${shlibs:Depends}, ${misc:Depends}, netpbm
 Recommends: logrotate, ppp, xterm
 Description: X emulator of the French Minitel
