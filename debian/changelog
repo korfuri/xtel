@@ -11,6 +11,7 @@ xtel (3.3.0-26) UNRELEASED; urgency=medium
   * Update watch file format version to 4.
   * Bump debhelper from old 12 to 13.
   * Fix day-of-week for changelog entry 3.2.1-6.
+  * Update standards version to 4.6.1, no changes needed.
 
  -- Samuel Thibault <sthibault@debian.org>  Sat, 08 Jan 2022 17:33:38 +0100
 
