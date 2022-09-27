@@ -10,6 +10,7 @@ xtel (3.3.0-26) UNRELEASED; urgency=medium
   * Trim trailing whitespace.
   * Update watch file format version to 4.
   * Bump debhelper from old 12 to 13.
+  * Fix day-of-week for changelog entry 3.2.1-6.
 
  -- Samuel Thibault <sthibault@debian.org>  Sat, 08 Jan 2022 17:33:38 +0100
 
@@ -416,7 +417,7 @@ xtel (3.2.1-6) unstable; urgency=low
 
   * Fixed another symlink problem (closes: #58162)
 
- -- Guillaume Morin <gemorin@attglobal.net>  Sun,  14 Feb 2000 17:58:38 +0100
+ -- Guillaume Morin <gemorin@attglobal.net>  Mon, 14 Feb 2000 17:58:38 +0100
 
 xtel (3.2.1-5) unstable; urgency=low
 
