@@ -7,6 +7,7 @@ xtel (3.3.0-26) UNRELEASED; urgency=medium
   [ Debian Janitor ]
   * Remove constraints unnecessary since buster (oldstable):
     + xtel: Drop versioned constraint on x11-common in Pre-Depends.
+  * Trim trailing whitespace.
 
  -- Samuel Thibault <sthibault@debian.org>  Sat, 08 Jan 2022 17:33:38 +0100
 
@@ -557,4 +558,3 @@ xtel (3.0.7-1); urgency=low
 Local variables:
 mode: debian-changelog
 End:
-
