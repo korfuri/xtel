@@ -8,6 +8,7 @@ xtel (3.3.0-26) UNRELEASED; urgency=medium
   * Remove constraints unnecessary since buster (oldstable):
     + xtel: Drop versioned constraint on x11-common in Pre-Depends.
   * Trim trailing whitespace.
+  * Update watch file format version to 4.
 
  -- Samuel Thibault <sthibault@debian.org>  Sat, 08 Jan 2022 17:33:38 +0100
 
