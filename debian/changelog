@@ -1,4 +1,4 @@
-xtel (3.3.0-26) UNRELEASED; urgency=medium
+xtel (3.3.0-26) unstable; urgency=medium
 
   [ Samuel Thibault ]
   * control: Bump Standards-Version to 4.6.0 (no change)
@@ -13,7 +13,7 @@ xtel (3.3.0-26) UNRELEASED; urgency=medium
   * Fix day-of-week for changelog entry 3.2.1-6.
   * Update standards version to 4.6.1, no changes needed.
 
- -- Samuel Thibault <sthibault@debian.org>  Sat, 08 Jan 2022 17:33:38 +0100
+ -- Samuel Thibault <sthibault@debian.org>  Sun, 01 Jan 2023 23:14:10 +0100
 
 xtel (3.3.0-25) unstable; urgency=medium
 
