@@ -125,13 +125,13 @@ char *telno, *device;
 		continue;
 	    }
 	    /* Si c'est le bon device, on tente du poser le lock */
-	    if (try_lock( nom_lck ) < 0) {
-		/* le modem est occupé... on passe au suivant */
-		numero_ligne++;
-	    }
-	    else {
+	    /* if (try_lock( nom_lck ) < 0) { */
+	    /* 	/\* le modem est occupé... on passe au suivant *\/ */
+	    /* 	numero_ligne++; */
+	    /* } */
+	    /* else { */
 		break;
-	    }
+	    /* } */
 	}
 	if (numero_ligne >= nb_lignes) {
 	    /* Dommage, c'etait la derniere :-( */
@@ -143,17 +143,17 @@ char *telno, *device;
 	log_debug ("Ouverture de la ligne %s", definition_lignes[numero_ligne].nom);
 #endif
 	/* ouvre la ligne */
-	if (definition_lignes[numero_ligne].tempo > 0) {
-	    /*
-	     * Pour les vieux modems, dans certains cas, il faut réinitialiser le
-	     * port série avant de pouvoir communiquer avec le modem.
-	     * Ceci est effectué en ouvrant puis refermant le device avec un certain
-	     * délai entre chaque opération.
-	     */
-	    fd = open (definition_lignes[numero_ligne].nom, O_RDWR|O_NDELAY);
-	    usleep(definition_lignes[numero_ligne].tempo);
-	    close(fd);
-	}
+	/* if (definition_lignes[numero_ligne].tempo > 0) { */
+	/*     /\* */
+	/*      * Pour les vieux modems, dans certains cas, il faut réinitialiser le */
+	/*      * port série avant de pouvoir communiquer avec le modem. */
+	/*      * Ceci est effectué en ouvrant puis refermant le device avec un certain */
+	/*      * délai entre chaque opération. */
+	/*      *\/ */
+	/*     fd = open (definition_lignes[numero_ligne].nom, O_RDWR|O_NDELAY); */
+	/*     usleep(definition_lignes[numero_ligne].tempo); */
+	/*     close(fd); */
+	/* } */
 	if ((fd = open (definition_lignes[numero_ligne].nom, O_RDWR|O_NDELAY)) < 0) {
 	    /* Derniere ligne, on passe l'erreur */
 	    if (numero_ligne == nb_lignes-1) {

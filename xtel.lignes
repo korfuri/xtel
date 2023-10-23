@@ -2,7 +2,7 @@
 # Fichier xtel.lignes
 #
 # Config V.23, modem HAYES generique
-modem0,/dev/modem,1200,7,E,\dat\r OK atm1b2\r OK atdt\T\r CONNECT,30
+#modem0,/dev/modem,1200,7,E,\dat\r OK atm1b2\r OK atdt\T\r CONNECT,30
 
 # Config TVR, Djinn-Flash 9600
 #le_tvr,/dev/modem,9600,8,N,\dat&fm1e0&k3+xm3\r OK atdt\T\r CONNECT,30
@@ -24,3 +24,7 @@ modem0,/dev/modem,1200,7,E,\dat\r OK atm1b2\r OK atdt\T\r CONNECT,30
 
 # Minitel 1
 #modem0,/dev/modem,1200,7,E,minitel1,30
+
+# Un pty cree par exemple par socat, qui se connecte directement a
+# un serveur applicatif
+modem0,/var/run/xtel/socket,1200,7,E,\T\x13\x53,10

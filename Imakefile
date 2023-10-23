@@ -17,7 +17,7 @@ XCOMM Modified for Debian GNU/Linux by Guillaume Morin and Eric Delaunay
 
 BITMAPSDIR= bitmaps
 PIXMAPSDIR= pixmaps
-XTELDIR=$(LIBDIR)/xtel
+XTELDIR=$(out)
 WIDGETS=Widgets
 LWIDGETS=-L$(WIDGETS) -l$(WIDGETS)
 XSRA=Xsra
@@ -82,9 +82,9 @@ SYSLOGCFLAGS= -DUSE_SYSLOG
 WINCFLAGS= -DWINDAUBE
 #endif
 
-#ifdef DEBUG_XTELD
+/*#ifdef DEBUG_XTELD*/
 XTELDFLAGS= -DDEBUG_XTELD
-#endif
+/*#endif*/
 
 #ifdef DONT_USE_POPUP
 POPUPFLAGS= -DDONT_USE_POPUP
@@ -106,11 +106,19 @@ SVR4CFLAGS= -DSVR4
       XTELLOGDIR = /var/log
          SBINDIR = /usr/sbin
 #else
+#ifdef NIXOS
+      XTELLIGNES = xtel.lignes
+    XTELSERVICES = xtel.services
+      XTELCFGDIR = /etc/xtel
+      XTELLOGDIR = /var/run/xtel
+         SBINDIR = $(BINDIR)
+#else
       XTELLIGNES = xtel.lignes
     XTELSERVICES = xtel.services
       XTELCFGDIR = $(XTELDIR)
       XTELLOGDIR = $(XTELDIR)
          SBINDIR = $(BINDIR)
+#endif
 #endif
 
 CONF_DEFINES  = '-DFICHIER_DEFINITION_LIGNES="$(XTELCFGDIR)/$(XTELLIGNES)"' \
@@ -136,7 +144,7 @@ EXTRA_LOAD_FLAGS = -L/usr/ucblib -lucb -lgen
 #endif /* lectra */
 #else
 #ifdef LinuxArchitecture
-#if defined(REDHAT) || defined(DEBIAN)
+#if defined(REDHAT) || defined(DEBIAN) || defined(NIXOS)
 DIAL_DEFINES = '-DFICHIER_LCK="/var/lock/LCK..%s"' 
 #else
 DIAL_DEFINES = '-DFICHIER_LCK="/usr/spool/uucp/LCK..%s"' 
